@@ -1,8 +1,9 @@
 class Api::TransformationRulesController < ApplicationController
-  before_action :set_rule, only: [:show, :update, :destroy]
+  before_action :set_inbox, only: [ :index, :create ]
+  before_action :set_rule, only: [ :show, :update, :destroy ]
 
   def index
-    render json: TransformationRule.all
+    render json: @inbox.transformation_rules
   end
 
   def show
@@ -10,7 +11,7 @@ class Api::TransformationRulesController < ApplicationController
   end
 
   def create
-    @rule = TransformationRule.new(rule_params)
+    @rule = @inbox.transformation_rules.new(rule_params)
     if @rule.save
       render json: @rule, status: :created
     else
@@ -32,6 +33,10 @@ class Api::TransformationRulesController < ApplicationController
   end
 
   private
+
+  def set_inbox
+    @inbox = WebhookInbox.find_by!(uuid: params[:webhook_inbox_uuid])
+  end
 
   def set_rule
     @rule = TransformationRule.find(params[:id])

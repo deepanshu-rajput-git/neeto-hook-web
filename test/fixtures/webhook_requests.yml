@@ -6,6 +6,7 @@ one:
   body: MyText
   status: 1
   ip_address: MyString
+  webhook_inbox: one
 
 two:
   method: MyString
@@ -13,3 +14,4 @@ two:
   body: MyText
   status: 1
   ip_address: MyString
+  webhook_inbox: two

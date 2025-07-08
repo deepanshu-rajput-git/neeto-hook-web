@@ -1,18 +1,21 @@
 Rails.application.routes.draw do
   # Mount Action Cable outside of API scope
-  mount ActionCable.server => '/cable'
+  mount ActionCable.server => "/cable"
 
   namespace :api do
     # Route for receiving webhooks
-    match 'hooks/:uuid', to: 'hooks#create', via: :all, as: :webhook_create
+    match "hooks/:uuid", to: "hooks#create", via: :all, as: :webhook_create
 
     # Routes for accessing webhook data
-    get '/hooks', to: 'webhook_inboxes#index'
-    post '/hooks', to: 'webhook_inboxes#create'
-    get '/hooks/:uuid', to: 'webhook_inboxes#show'
-    get '/hooks/:uuid/requests', to: 'hooks#index'
-    get '/hooks/:uuid/requests/:id', to: 'hooks#show'
+    get "/hooks", to: "webhook_inboxes#index"
+    post "/hooks", to: "webhook_inboxes#create"
+    get "/hooks/:uuid", to: "webhook_inboxes#show"
+    resources :webhook_inboxes, param: :uuid, only: [] do
+      resources :webhook_requests, only: [ :index, :show ]
+      resources :transformation_rules, only: [ :index, :create ]
+    end
+    resources :transformation_rules, only: [ :show, :update, :destroy ]
 
-    resources :transformation_rules, only: [:index, :show, :create, :update, :destroy]
+    get "dashboard/stats", to: "dashboard#stats"
   end
 end

@@ -3,5 +3,5 @@ class WebhookRequest < ApplicationRecord
 
   validates :method, presence: true
 
-  after_create_commit { WebhookBroadcastJob.perform_later(self) }
+  enum :status, { pending: 0, processing: 1, success: 2, failed: 3 }
 end

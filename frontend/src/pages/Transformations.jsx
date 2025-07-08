@@ -1,39 +1,51 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import { okaidia } from "@uiw/codemirror-theme-okaidia";
 import axios from "axios";
+import EditRuleModal from "../components/EditRuleModal";
 
-const Transformations = () => {
+const Transformations = ({ activeInbox, loading }) => {
   const [rules, setRules] = useState([]);
   const [newRule, setNewRule] = useState({
     name: "",
     rule_type: "JS",
-    body: 'payload.new_field = "transformed";',
+    body: `payload.email = payload.user_name.match(/([^)]+)/)[1];
+payload.username = payload.user_name.split(" ")[0];`,
+    is_enabled: true,
   });
+  const [editingRule, setEditingRule] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
-    fetchRules();
-  }, []);
-
-  const fetchRules = async () => {
+  const fetchRules = useCallback(async () => {
     try {
-      const response = await axios.get("/api/transformation_rules");
-      const fetchedRules = response.data?.transformation_rules || [];
+      const response = await axios.get(
+        `/api/webhook_inboxes/${activeInbox.uuid}/transformation_rules`
+      );
+      const fetchedRules = response.data.transformation_rules || [];
       setRules(fetchedRules);
     } catch (error) {
       console.error("Error fetching transformation rules:", error);
       setRules([]); // fallback to empty array on error
     }
-  };
+  }, [activeInbox]);
+
+  useEffect(() => {
+    if (activeInbox) {
+      fetchRules();
+    }
+  }, [activeInbox, fetchRules]);
 
   const handleCreateRule = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/transformation_rules", {
-        transformation_rule: newRule,
-      });
-      setRules([...rules, response.data.transformation_rule]);
+      await axios.post(
+        `/api/webhook_inboxes/${activeInbox.uuid}/transformation_rules`,
+        {
+          transformation_rule: newRule,
+        }
+      );
+      fetchRules();
       setNewRule({
         name: "",
         rule_type: "JS",
@@ -47,7 +59,7 @@ const Transformations = () => {
   const handleDeleteRule = async (id) => {
     try {
       await axios.delete(`/api/transformation_rules/${id}`);
-      setRules(rules.filter((rule) => rule.id !== id));
+      fetchRules();
     } catch (error) {
       console.error("Error deleting transformation rule:", error);
     }
@@ -64,6 +76,37 @@ const Transformations = () => {
       console.error("Error toggling transformation rule:", error);
     }
   };
+
+  const handleEditRule = (rule) => {
+    setEditingRule(rule);
+    setIsModalOpen(true);
+  };
+
+  const handleUpdateRule = async (updatedRule) => {
+    try {
+      await axios.put(`/api/transformation_rules/${updatedRule.id}`, {
+        transformation_rule: updatedRule,
+      });
+      fetchRules();
+      setIsModalOpen(false);
+      setEditingRule(null);
+    } catch (error) {
+      console.error("Error updating transformation rule:", error);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div>
+        <h1 className='text-3xl font-bold text-gray-900 dark:text-white mb-6'>
+          Payload Transformations
+        </h1>
+        <p className='text-gray-500 dark:text-gray-400'>
+          Loading transformation rules...
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -84,7 +127,8 @@ const Transformations = () => {
               type='text'
               value={newRule.name}
               onChange={(e) => setNewRule({ ...newRule, name: e.target.value })}
-              className='mt-1 block w-full bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600 rounded-md shadow-sm focus:ring-green-600 focus:border-green-600 sm:text-sm'
+              className='mt-1 block w-full bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-green-500 focus:border-transparent sm:text-sm p-2'
+              placeholder='e.g., "Format User Data"'
               required
             />
           </div>
@@ -148,6 +192,12 @@ const Transformations = () => {
                     {rule.is_enabled ? "Enabled" : "Disabled"}
                   </button>
                   <button
+                    onClick={() => handleEditRule(rule)}
+                    className='text-blue-500 hover:underline'
+                  >
+                    Edit
+                  </button>
+                  <button
                     onClick={() => handleDeleteRule(rule.id)}
                     className='text-red-500 hover:underline'
                   >
@@ -159,6 +209,13 @@ const Transformations = () => {
           )}
         </div>
       </div>
+      {isModalOpen && (
+        <EditRuleModal
+          rule={editingRule}
+          onSave={handleUpdateRule}
+          onCancel={() => setIsModalOpen(false)}
+        />
+      )}
     </div>
   );
 };

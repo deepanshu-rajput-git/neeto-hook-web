@@ -8,7 +8,7 @@ class Api::WebhookInboxesController < ApplicationController
     @webhook_inbox = WebhookInbox.find_by!(uuid: params[:uuid])
     render json: @webhook_inbox, serializer: WebhookInboxSerializer
   rescue ActiveRecord::RecordNotFound
-    render json: { error: 'Inbox not found' }, status: :not_found
+    render json: { error: "Inbox not found" }, status: :not_found
   end
 
   def create

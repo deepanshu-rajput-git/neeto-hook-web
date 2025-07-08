@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_08_070915) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_08_134622) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -21,6 +21,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_08_070915) do
     t.boolean "is_enabled", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "webhook_inbox_id"
+    t.index ["webhook_inbox_id"], name: "index_transformation_rules_on_webhook_inbox_id"
   end
 
   create_table "webhook_inboxes", force: :cascade do |t|
@@ -44,5 +46,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_08_070915) do
     t.index ["webhook_inbox_id"], name: "index_webhook_requests_on_webhook_inbox_id"
   end
 
+  add_foreign_key "transformation_rules", "webhook_inboxes"
   add_foreign_key "webhook_requests", "webhook_inboxes"
 end

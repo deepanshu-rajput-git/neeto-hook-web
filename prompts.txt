@@ -88,3 +88,47 @@ React:
 - Create a UI to manage transformation rules
 - Rule editor (text editor using Monaco/CodeMirror)
 - Associate transformation to a hook endpoint
+
+Prompt 06: Auth + Rate Limiting + Security
+Secure the NeetoHook app:
+1. Add JWT-based API authentication (use Knock/Devise-JWT)
+2. Add rate limiting using Rack::Attack for /hooks
+3. Protect ActionCable with authentication
+4. Add CORS policy for frontend domain
+5. Add audit logs for incoming requests (ip, time, etc)
+
+Prompt 07: Deployment & CI/CD
+Help me deploy the fullstack app to Fly.io or Render.
+
+1. Dockerfile for Rails API and separate for React (or combine)
+2. fly.toml or render.yaml
+3. GitHub Actions workflow:
+   - Backend: run tests + deploy on main push
+   - Frontend: lint + deploy
+4. Seed sample data and environment setup scripts
+
+Prompt 08: Metrics, Analytics & Logging
+Add observability to the app:
+- Backend:
+  - Integrate Skylight or NewRelic
+  - Log incoming hook count, processing time
+- Frontend:
+  - Add simple dashboard: total hooks received, today, success/fail
+  - Track latency between webhook and broadcast
+
+  Prompt 09: Documentation Generator
+  Create in-app and developer documentation:
+1. Swagger/OpenAPI docs for all Rails endpoints
+2. Markdown-based API explorer page in React
+3. CLI tool to test endpoints (optional bonus)
+
+
+Prompt 10: Test Coverage (RSpec + React Testing Library)
+Help write test suites:
+- RSpec tests for Webhook controller
+- Model validations for WebhookRequest
+- Broadcast job specs
+- React Testing Library tests for:
+  - HookTable component
+  - HookDetailsViewer
+  - RuleEditor form

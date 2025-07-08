@@ -5,9 +5,11 @@ one:
   rule_type: MyString
   body: MyText
   is_enabled: false
+  webhook_inbox: one
 
 two:
   name: MyString
   rule_type: MyString
   body: MyText
   is_enabled: false
+  webhook_inbox: two
