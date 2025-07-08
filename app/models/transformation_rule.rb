@@ -1,0 +1,2 @@
+class TransformationRule < ApplicationRecord
+end

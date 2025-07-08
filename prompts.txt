@@ -1,0 +1,90 @@
+Prompt 01: Project Scaffolding & Structure
+I want to build a fullstack application named `NeetoHook`.
+
+Tech stack:
+- Ruby on Rails for backend (API-only mode)
+- React frontend (can be inside /frontend or connected via Vite)
+- Tailwind CSS for UI
+- PostgreSQL as the database
+
+Please generate shell commands and folder structure to:
+1. Create a new Rails API-only app
+2. Add React with Vite bundler
+3. Set up Tailwind CSS in React
+4. Connect both for development (dev script/proxy)
+5. Enable CORS in Rails for React frontend
+
+
+Prompt 02: Webhook API Endpoints in Rails
+In the Rails API app for NeetoHook, I want to handle webhooks.
+
+Create the following:
+1. A `WebhookRequest` model with fields:
+   - method:string
+   - headers:text (stored as JSON)
+   - body:text
+   - status:integer (default 200)
+   - ip_address:string
+
+2. A controller `WebhookRequestsController` with:
+   - POST /hooks → stores incoming request
+   - GET /hooks → returns paginated JSON of recent requests
+   - GET /hooks/:id → returns detailed request
+
+3. A serializer using ActiveModel::Serializer
+4. Validations and proper error handling
+5. JSON API response format
+
+Also include:
+- A migration file
+- Routes
+- Seeds (optional dummy hooks)
+
+
+ Prompt 03: Frontend UI in React
+ Create the React frontend of NeetoHook that includes:
+
+Pages:
+- Dashboard: shows list of incoming webhook requests
+- Hook Details: view full payload/headers of a specific webhook
+
+Components:
+- HeaderBar
+- Sidebar (navigation)
+- HookTable (paginated)
+- HookDetailsViewer
+
+Features:
+- Consume the Rails API from localhost (proxy setup)
+- Tailwind styling
+- Responsive layout with sidebar + top bar
+- Dark mode toggle (optional)
+
+
+Prompt 04: Real-Time Streaming with WebSockets
+Implement live streaming of webhook requests using ActionCable and WebSocket.
+
+Rails Backend:
+1. Create a `WebhookChannel` that broadcasts new `WebhookRequest`
+2. Use ActiveJob to broadcast after a webhook is saved
+3. Secure ActionCable connection
+
+React Frontend:
+1. Connect via WebSocket (use native WebSocket or socket.io-client)
+2. On receiving event, append new row to HookTable
+3. Show a toast or badge for new incoming requests
+
+
+Prompt 05: Payload Transformation via UI + Backend
+I want to allow users to define simple transformations on incoming webhook payloads.
+
+Rails:
+- Add a `transformation_rules` table with:
+  - name, rule_type (JS/regex), body, user_id (optional)
+- Apply transformation in controller before saving payload
+- Allow disabling/enabling rules
+
+React:
+- Create a UI to manage transformation rules
+- Rule editor (text editor using Monaco/CodeMirror)
+- Associate transformation to a hook endpoint

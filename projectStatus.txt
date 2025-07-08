@@ -1,0 +1,123 @@
+Project Status Report: NeetoHook
+
+  ---
+
+
+  1. Executive Summary
+
+
+  The foundational architecture of NeetoHook has been successfully established. The Rails backend is operational in
+  API-only mode, connected to a PostgreSQL database. The React frontend is set up with Vite and styled with Tailwind CSS.
+  Core features like live webhook inspection, history, and real-time updates via Action Cable are implemented. A basic
+  version of payload transformation is also functional.
+
+
+  The project is now at a stage where development can shift from the core setup to implementing the key business logic and
+  user-facing features that define the product's value proposition.
+
+  ---
+
+  2. Completed Features
+
+
+  The following features have been implemented and are considered functional:
+
+
+   * ✅ Backend: Ruby on Rails (API-only) with a PostgreSQL database.
+   * ✅ Frontend: React with Vite and Tailwind CSS.
+   * ✅ Real-Time: Live updates on the dashboard using Action Cable.
+   * ✅ Core - Unique URL: A central endpoint (/api/hooks) is available to receive webhook requests.
+   * ✅ Core - Live Inspection: The dashboard displays incoming webhooks in real-time, showing method, IP, and a timestamp.
+   * ✅ Core - Webhook History: The dashboard lists all received webhooks, which can be inspected individually.
+   * ✅ Custom Logic - Payload Transformation: A UI and backend system exists to create and apply simple JavaScript-based
+     payload transformations.
+
+  ---
+
+
+  3. Remaining Features
+
+  The following is a detailed breakdown of features from the PRD that are yet to be implemented.
+
+
+  Core Features
+   * 🟡 Retention Settings: The system currently stores webhooks indefinitely.
+       * To-Do: Implement a mechanism (e.g., a background job) to delete webhook records based on configurable retention
+         periods (7 days, 30 days).
+   * 🔴 Webhook History & Search: Basic history exists, but search is missing.
+       * To-Do: Add a search bar to the dashboard to filter webhooks by content, headers, or status.
+
+
+  Forwarding & Replaying
+   * 🔴 Forward to Destinations:
+       * To-Do: Create models and UI to manage destination endpoints. Implement a job to forward incoming webhooks to these
+         destinations.
+   * 🔴 Conditional Forwarding Logic:
+       * To-Do: Extend the forwarding logic to allow users to define conditions (e.g., based on header values or payload
+         content) for when a webhook should be forwarded.
+   * 🔴 Manual/Automated Replay:
+       * To-Do: Add a "Replay" button to the webhook details view. Implement the backend logic to re-send a stored webhook
+         request.
+
+
+  Custom Logic
+   * 🟡 WebhookScript Editor: The current implementation only transforms the payload.
+       * To-Do: Extend the script capabilities to allow modifying headers and returning custom mocked responses directly from
+         the script.
+   * 🔴 Visual Editor:
+       * To-Do: Design and build a no-code, drag-and-drop interface for creating transformation and forwarding rules.
+
+
+  Local Tunnels
+   * 🔴 CLI Tool:
+       * To-Do: Develop a command-line interface (potentially in Go, as suggested) that can create a secure tunnel to a
+         user's local development server (e.g., localhost:4000).
+
+
+  Mocking
+   * 🔴 Custom Mock API Endpoints:
+       * To-Do: Implement a feature to let users define custom API endpoints within NeetoHook that return predefined
+         responses, status codes, and headers.
+
+
+  Email & DNS Testing
+   * 🔴 Temporary Email Addresses:
+       * To-Do: Set up a system to generate unique email addresses and display received emails.
+   * 🔴 DNS Endpoint Testing:
+       * To-Do: Create a mechanism to test DNS-related webhook callbacks.
+
+
+  Reliability
+   * 🔴 Automatic Retries:
+       * To-Do: Implement a robust background job system (leveraging solid_queue) for automatic retries with exponential
+         backoff for failed forwarding attempts.
+   * 🔴 Webhook Queue & Audit Log:
+       * To-Do: Create a view to inspect the status of queued webhooks and an audit log for each request (e.g., forwarding
+         attempts, transformations applied).
+   * 🔴 Configurable Retry Policies:
+       * To-Do: Allow users to define custom retry policies (number of retries, backoff strategy) for each destination.
+
+
+  Security
+   * 🔴 API Key-Based Access:
+       * To-Do: Implement user authentication and generate API keys for programmatic access.
+   * 🔴 IP Whitelisting:
+       * To-Do: Add the ability to restrict incoming requests to a list of allowed IP addresses.
+   * 🔴 Encrypted Payload Storage:
+       * To-Do: Use Rails' built-in encryption (ActiveRecord::Encryption) to encrypt sensitive payload data at rest.
+   * 🔴 Audit Logs & Teams:
+       * To-Do: Implement user and team management, with audit logs tracking all actions.
+
+
+  Integrations
+   * 🔴 All Integrations:
+       * To-Do: Implement connections and forwarding logic for each listed third-party service (Slack, Discord, Stripe,
+         etc.).
+
+
+  Branding & UI/UX
+   * 🔴 Brand Identity:
+       * To-Do: Update the Tailwind CSS configuration to use the specific brand colors defined in the PRD. Create and
+         integrate the "N-hook" logo.
+   * 🔴 Dark Mode Toggle:
+       * To-Do: Implement a theme-switching capability in the React frontend.
