@@ -9,6 +9,11 @@ class Api::WebhookRequestsController < ApplicationController
     render json: { webhook_requests: @webhook_requests.map { |req| WebhookRequestSerializer.new(req).as_json } }
   end
 
+  def all
+    @webhook_requests = WebhookRequest.order(created_at: :desc)
+    render json: @webhook_requests, each_serializer: WebhookRequestSerializer
+  end
+
   # GET /hooks/1
   def show
     render json: @webhook_request

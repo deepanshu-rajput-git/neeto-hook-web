@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import axios from "axios";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import HeaderBar from "./components/HeaderBar";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./pages/Dashboard";
@@ -151,6 +153,7 @@ function App() {
   return (
     <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <div className="flex flex-col h-screen bg-gray-50 dark:bg-gray-900">
+        <ToastContainer />
         <HeaderBar isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
         <div className="flex flex-1 overflow-hidden">
           <Sidebar />

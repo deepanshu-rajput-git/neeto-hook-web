@@ -1,6 +1,7 @@
 import React from "react";
 import HookTable from "../components/HookTable";
 import Toast from "../components/Toast";
+import DownloadWebhooksButton from "../components/DownloadWebhooksButton";
 
 const StatCard = ({ title, value }) => (
   <div className="bg-white dark:bg-gray-700 p-4 rounded-lg shadow">
@@ -82,9 +83,12 @@ const Dashboard = ({
         </div>
       </div>
 
-      <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-        Received Webhooks
-      </h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+          Received Webhooks
+        </h2>
+        {hooks.length > 0 && <DownloadWebhooksButton inboxId={activeInbox.uuid} />}
+      </div>
       <HookTable hooks={hooks} />
       <Toast
         message={toastMessage}

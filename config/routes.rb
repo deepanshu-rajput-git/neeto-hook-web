@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     get "/hooks", to: "webhook_inboxes#index"
     post "/hooks", to: "webhook_inboxes#create"
     get "/hooks/:uuid", to: "webhook_inboxes#show"
+    get "/webhooks/all", to: "webhook_requests#all"
     resources :webhook_inboxes, param: :uuid, only: [] do
       resources :webhook_requests, only: [ :index, :show ]
       resources :transformation_rules, only: [ :index, :create ]
