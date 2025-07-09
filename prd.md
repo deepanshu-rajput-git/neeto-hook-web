@@ -8,7 +8,7 @@
 
 ## 2. Branding & Identity
 
-**Tagline:** One hook to inspect them all — forever free.
+**Tagline:** One hook to inspect them all.
 
 **Brand Colors:**
 • Primary: #17bf45

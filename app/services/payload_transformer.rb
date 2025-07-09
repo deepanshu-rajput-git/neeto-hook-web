@@ -23,18 +23,17 @@ class PayloadTransformer
     # For now, we only support JS transformations
     return body unless rule.rule_type == "JS"
 
-    payload_for_js = body
-    begin
-      JSON.parse(body)
-    rescue JSON::ParserError
-      payload_for_js = body.to_json
-    end
-    payload_for_js = "{}" if body.blank?
+    payload = begin
+                JSON.parse(body)
+              rescue JSON::ParserError
+                body
+              end
+    payload = {} if payload.blank?
 
     begin
       context = MiniRacer::Context.new
       js_code = <<-JS
-        var payload = #{payload_for_js};
+        var payload = #{payload.to_json};
         #{rule.body};
         JSON.stringify(payload);
       JS
