@@ -3,11 +3,13 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import HeaderBar from "./components/HeaderBar";
-import Sidebar from "./components/Sidebar";
+
+import LandingPage from "./pages/LandingPage";
 import Dashboard from "./pages/Dashboard";
 import HookDetails from "./pages/HookDetails";
 import Transformations from "./pages/Transformations";
+import HeaderBar from "./components/HeaderBar";
+import Sidebar from "./components/Sidebar";
 import cable from "./services/cable";
 
 function App() {
@@ -150,44 +152,59 @@ function App() {
     };
   }, [activeInbox, fetchStats]);
 
+  const MainLayout = ({ children }) => (
+    <div className="flex flex-col h-screen bg-gray-50 dark:bg-gray-900">
+      <ToastContainer />
+      <HeaderBar isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
+      <div className="flex flex-1 overflow-hidden">
+        <Sidebar />
+        <main className="flex-1 p-6 overflow-y-auto">{children}</main>
+      </div>
+    </div>
+  );
+
   return (
     <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-      <div className="flex flex-col h-screen bg-gray-50 dark:bg-gray-900">
-        <ToastContainer />
-        <HeaderBar isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
-        <div className="flex flex-1 overflow-hidden">
-          <Sidebar />
-          <main className="flex-1 p-6 overflow-y-auto">
-            <Routes>
-              <Route
-                path="/"
-                element={
-                  <Dashboard
-                    activeInbox={activeInbox}
-                    loading={loading}
-                    hooks={hooks}
-                    stats={stats}
-                    toastMessage={toastMessage}
-                    showToast={showToast}
-                    setToastMessage={setToastMessage}
-                    setShowToast={setShowToast}
-                  />
-                }
-              />
-              <Route
-                path="/hooks/:id"
-                element={<HookDetails activeInbox={activeInbox} />}
-              />
-              <Route
-                path="/transformations"
-                element={
-                  <Transformations activeInbox={activeInbox} loading={loading} />
-                }
-              />
-            </Routes>
-          </main>
-        </div>
-      </div>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route
+          path="/*"
+          element={
+            <MainLayout>
+              <Routes>
+                <Route
+                  path="dashboard"
+                  element={
+                    <Dashboard
+                      activeInbox={activeInbox}
+                      loading={loading}
+                      hooks={hooks}
+                      stats={stats}
+                      toastMessage={toastMessage}
+                      showToast={showToast}
+                      setToastMessage={setToastMessage}
+                      setShowToast={setShowToast}
+                    />
+                  }
+                />
+                <Route
+                  path="hooks/:id"
+                  element={<HookDetails activeInbox={activeInbox} />}
+                />
+                <Route
+                  path="transformations"
+                  element={
+                    <Transformations
+                      activeInbox={activeInbox}
+                      loading={loading}
+                    />
+                  }
+                />
+              </Routes>
+            </MainLayout>
+          }
+        />
+      </Routes>
     </Router>
   );
 }

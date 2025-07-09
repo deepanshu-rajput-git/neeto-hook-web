@@ -16,5 +16,8 @@
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^9.2.0"
+  },
+  "dependencies": {
+    "@heroicons/react": "^2.2.0"
   }
 }
