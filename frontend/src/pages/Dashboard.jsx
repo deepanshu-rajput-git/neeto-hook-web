@@ -76,7 +76,7 @@ const Dashboard = ({
           />
           <button
             onClick={copyToClipboard}
-            className="p-2 border border-l-0 border-green-500 bg-green-500 text-white rounded-r-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+            className="p-2 border border-l-0 border-green-700 bg-green-700 text-white rounded-r-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
           >
             Copy
           </button>

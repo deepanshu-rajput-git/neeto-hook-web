@@ -61,6 +61,8 @@ const HookDetailsViewer = ({ hook }) => {
           <dd className="text-gray-900 dark:text-gray-200">
             {new Date(hook.created_at).toLocaleString()}
           </dd>
+          <dt className="text-gray-600">Latency:</dt>
+          <dd className="text-gray-900 dark:text-gray-200">{hook.latency} ms</dd>
         </dl>
       </div>
 

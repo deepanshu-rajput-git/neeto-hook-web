@@ -15,7 +15,7 @@ const Toast = ({ message, show, onHide }) => {
   }
 
   return (
-    <div className="fixed bottom-4 right-4 bg-lime-500 text-white py-2 px-4 rounded-lg shadow-lg animate-bounce">
+    <div className="fixed bottom-4 right-4 bg-green-700 text-white py-2 px-4 rounded-lg shadow-lg">
       {message}
     </div>
   );

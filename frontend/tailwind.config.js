@@ -1,3 +1,5 @@
+import colors from 'tailwindcss/colors'
+
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: 'class',
@@ -6,7 +8,12 @@ export default {
     "./src/**/*.{js,jsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        ...colors,
+        primary: '#1ea840',
+      },
+    },
   },
   plugins: [],
 }
