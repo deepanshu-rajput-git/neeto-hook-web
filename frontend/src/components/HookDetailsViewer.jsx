@@ -14,7 +14,29 @@ const HookDetailsViewer = ({ hook }) => {
     }
   };
 
-  const parsedHeaders = safeParse(hook.headers);
+  const parseHeaders = (headers) => {
+    if (typeof headers === 'object' && headers !== null) {
+      return headers;
+    }
+    if (typeof headers === 'string') {
+      try {
+        // Handle Ruby hash-like strings: "{\"key\"=>\"value\"}"
+        const jsonString = headers.replace(/=>/g, ':');
+        return JSON.parse(jsonString);
+      } catch (e) {
+        // Fallback for regular JSON strings or other formats
+        try {
+          return JSON.parse(headers);
+        } catch (e2) {
+          return { error: "Could not parse headers", raw: headers };
+        }
+      }
+    }
+    return headers;
+  };
+
+
+  const parsedHeaders = parseHeaders(hook.headers);
   const parsedBody = safeParse(hook.body);
   const parsedOriginalBody = hook.original_body ? safeParse(hook.original_body) : null;
 
