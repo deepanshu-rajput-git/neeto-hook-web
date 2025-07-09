@@ -1,5 +1,5 @@
 Prompt 01: Project Scaffolding & Structure
-I want to build a fullstack application named `NeetoHook`.
+I want to build a fullstack application named `NeetoWebhooks`.
 
 Tech stack:
 - Ruby on Rails for backend (API-only mode)
@@ -16,7 +16,7 @@ Please generate shell commands and folder structure to:
 
 
 Prompt 02: Webhook API Endpoints in Rails
-In the Rails API app for NeetoHook, I want to handle webhooks.
+In the Rails API app for NeetoWebhooks, I want to handle webhooks.
 
 Create the following:
 1. A `WebhookRequest` model with fields:
@@ -42,7 +42,7 @@ Also include:
 
 
  Prompt 03: Frontend UI in React
- Create the React frontend of NeetoHook that includes:
+ Create the React frontend of NeetoWebhooks that includes:
 
 Pages:
 - Dashboard: shows list of incoming webhook requests
@@ -90,7 +90,7 @@ React:
 - Associate transformation to a hook endpoint
 
 Prompt 06: Auth + Rate Limiting + Security
-Secure the NeetoHook app:
+Secure the NeetoWebhooks app:
 1. Add JWT-based API authentication (use Knock/Devise-JWT)
 2. Add rate limiting using Rack::Attack for /hooks
 3. Protect ActionCable with authentication

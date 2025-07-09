@@ -1,6 +1,6 @@
-# NeetoHook
+# NeetoWebhooks
 
-NeetoHook is a webhook testing and debugging tool. It provides a unique URL to which you can send webhooks, and it will display the requests in real-time. It also allows you to create transformation rules to modify the webhook payload before it is processed.
+NeetoWebhooks is a webhook testing and debugging tool. It provides a unique URL to which you can send webhooks, and it will display the requests in real-time. It also allows you to create transformation rules to modify the webhook payload before it is processed.
 
 ## Setup and Running the Application
 

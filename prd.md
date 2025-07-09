@@ -2,7 +2,7 @@
 
 ---
 
-### 🏷 Product Name: **NeetoHook**
+### 🏷 Product Name: **NeetoWebhooks**
 
 > A unified webhook inspection, transformation, and delivery reliability platform for developers and teams.
 
@@ -29,7 +29,7 @@
 
 ## 1. 🧭 Purpose
 
-**NeetoHook** aims to simplify the process of testing, inspecting, forwarding, mocking, and reliably delivering webhooks. It is a developer-first platform that combines live inspection, customizable behavior, local tunneling, and serverless transformations—all from one dashboard.
+**NeetoWebhooks** aims to simplify the process of testing, inspecting, forwarding, mocking, and reliably delivering webhooks. It is a developer-first platform that combines live inspection, customizable behavior, local tunneling, and serverless transformations—all from one dashboard.
 
 ---
 
@@ -132,7 +132,7 @@ Modern applications rely heavily on webhooks for real-time communication. Howeve
 
 ### Flow 1: Quick Test Webhook
 
-1. User visits NeetoHook, gets a URL
+1. User visits NeetoWebhooks, gets a URL
 2. Sends a `POST` to the URL
 3. Sees request in live dashboard
 4. Optionally forwards payload to production/staging
@@ -145,7 +145,7 @@ Modern applications rely heavily on webhooks for real-time communication. Howeve
 
 ### Flow 3: Localhost Debugging
 
-1. Start tunnel CLI: `NeetoHook tunnel --port 4000`
+1. Start tunnel CLI: `NeetoWebhooks tunnel --port 4000`
 2. Get HTTPS public URL
 3. Point webhook to it
 4. Receive real-time data in local dev environment

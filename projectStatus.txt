@@ -1,4 +1,4 @@
-Project Status Report: NeetoHook
+Project Status Report: NeetoWebhooks
 
   ---
 
@@ -6,7 +6,7 @@ Project Status Report: NeetoHook
   1. Executive Summary
 
 
-  The foundational architecture of NeetoHook has been successfully established. The Rails backend is operational in
+  The foundational architecture of NeetoWebhooks has been successfully established. The Rails backend is operational in
   API-only mode, connected to a PostgreSQL database. The React frontend is set up with Vite and styled with Tailwind CSS.
   Core features like live webhook inspection, history, and real-time updates via Action Cable are implemented. A basic
   version of payload transformation is also functional.
@@ -76,7 +76,7 @@ Project Status Report: NeetoHook
 
   Mocking
    * 🔴 Custom Mock API Endpoints:
-       * To-Do: Implement a feature to let users define custom API endpoints within NeetoHook that return predefined
+       * To-Do: Implement a feature to let users define custom API endpoints within NeetoWebhooks that return predefined
          responses, status codes, and headers.
 
 
