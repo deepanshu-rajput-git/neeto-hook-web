@@ -12,7 +12,7 @@ class Api::WebhookInboxesController < ApplicationController
   end
 
   def create
-    workspace = Workspace.first # Or current_user.workspace if using authentication
+    workspace = Workspace.first_or_create!(name: "Default Workspace")
 
     @webhook_inbox = WebhookInbox.new(workspace: workspace)
 

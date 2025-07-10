@@ -8,7 +8,6 @@
   },
   "scripts": {
     "dev": "concurrently \"bundle exec rails s\" \"npm run dev --prefix frontend\"",
-    "install": "bundle install && npm install --prefix frontend",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm run build --prefix frontend && mv ./frontend/dist ./public "
   },
@@ -19,6 +18,6 @@
     "concurrently": "^9.2.0"
   },
   "dependencies": {
-    "@heroicons/react": "^2.2.0"
+    "playwright": "^1.54.0"
   }
 }

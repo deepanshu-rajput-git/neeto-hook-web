@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
   root 'static_pages#index'
-  get '*path', to: 'static_pages#index'
 
   # Mount Action Cable outside of API scope
   mount ActionCable.server => "/cable"
@@ -24,4 +23,7 @@ Rails.application.routes.draw do
 
     get "dashboard/stats", to: "dashboard#stats"
   end
+
+  # Catch-all route for frontend routing (must be last)
+  get '*path', to: 'static_pages#index'
 end
