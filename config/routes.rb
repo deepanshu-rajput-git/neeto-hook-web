@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  root to: proc { [200, {}, ['OK']] }
+  root 'static_pages#index'
+  get '*path', to: 'static_pages#index'
 
   # Mount Action Cable outside of API scope
   mount ActionCable.server => "/cable"
