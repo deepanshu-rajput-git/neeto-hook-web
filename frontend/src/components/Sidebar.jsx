@@ -20,7 +20,7 @@ const Sidebar = () => {
       (path === "/dashboard" && location.pathname.startsWith("/hooks")) ||
       (path !== "/dashboard" && location.pathname.startsWith(path));
     return isActive
-      ? "bg-green-500 text-white shadow-sm"
+      ? "bg-green-600 text-white shadow-sm"
       : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800";
   };
 

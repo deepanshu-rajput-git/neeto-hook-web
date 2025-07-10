@@ -11,7 +11,7 @@ const CustomToastr = ({
   type = "success",
   show,
   onClose,
-  duration = 5000,
+  duration = 3000,
   position = "bottom-right",
 }) => {
   const [isVisible, setIsVisible] = useState(false);
