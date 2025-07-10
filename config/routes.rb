@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   # Mount Action Cable outside of API scope
   mount ActionCable.server => "/cable"
 
+  get "/health_check", to: proc { [200, {}, ['OK']] }
+
   namespace :api do
     # Route for receiving webhooks
     match "hooks/:uuid", to: "hooks#create", via: :all, as: :webhook_create
