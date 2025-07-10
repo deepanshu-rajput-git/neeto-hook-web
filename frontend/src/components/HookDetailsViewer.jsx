@@ -47,9 +47,9 @@ const HookDetailsViewer = ({ hook, setToastMessage, setShowToast }) => {
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 max-w-5xl mx-auto overflow-hidden">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-white bg-gray-800 -mx-6 -mt-6 mb-6 p-4 rounded-t-lg">
-          Webhook Details
+      <div className="flex justify-between items-center bg-gray-800 -mx-6 -mt-6 mb-6 p-4 rounded-t-lg">
+        <h2 className="text-2xl font-bold text-white">
+          Webhook details
         </h2>
         <button
           onClick={() => {
@@ -97,7 +97,7 @@ const HookDetailsViewer = ({ hook, setToastMessage, setShowToast }) => {
             Copy
           </button>
         </div>
-        <pre className="overflow-auto max-h-[600px] bg-gray-100 rounded p-4 text-sm font-mono whitespace-pre-wrap break-words">
+        <pre className="overflow-auto max-h-[200px] bg-gray-100 rounded p-4 text-sm font-mono whitespace-pre-wrap break-words">
           {JSON.stringify(parsedHeaders, null, 2)}
         </pre>
       </div>
@@ -113,7 +113,11 @@ const HookDetailsViewer = ({ hook, setToastMessage, setShowToast }) => {
               Copy
             </button>
           </div>
-          <FormattedJsonViewer data={parsedOriginalBody} />
+          <FormattedJsonViewer
+            data={parsedOriginalBody}
+            setToastMessage={setToastMessage}
+            setShowToast={setShowToast}
+          />
         </div>
       )}
 
@@ -129,7 +133,11 @@ const HookDetailsViewer = ({ hook, setToastMessage, setShowToast }) => {
             Copy
           </button>
         </div>
-        <FormattedJsonViewer data={parsedBody} />
+        <FormattedJsonViewer
+          data={parsedBody}
+          setToastMessage={setToastMessage}
+          setShowToast={setShowToast}
+        />
       </div>
     </div>
   );

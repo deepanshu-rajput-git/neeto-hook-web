@@ -1,7 +1,7 @@
 import React from "react";
 import JsonView from "@microlink/react-json-view";
 
-const FormattedJsonViewer = ({ data, initiallyExpandedLevel = 2 }) => {
+const FormattedJsonViewer = ({ data, initiallyExpandedLevel = 2, setToastMessage, setShowToast }) => {
   if (!data) {
     return (
       <div className="p-4 text-sm font-mono text-red-500">
@@ -9,6 +9,13 @@ const FormattedJsonViewer = ({ data, initiallyExpandedLevel = 2 }) => {
       </div>
     );
   }
+
+  const handleCopy = (copy) => {
+    if (setToastMessage && setShowToast) {
+      setToastMessage("JSON copied to clipboard!");
+      setShowToast(true);
+    }
+  };
 
   return (
     <div className="overflow-auto max-h-[600px] bg-gray-100 rounded p-4 text-sm font-mono">
@@ -18,6 +25,7 @@ const FormattedJsonViewer = ({ data, initiallyExpandedLevel = 2 }) => {
         collapsed={initiallyExpandedLevel}
         displayDataTypes={false}
         enableClipboard
+        onCopy={handleCopy}
       />
     </div>
   );
