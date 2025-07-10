@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useMemo,
+} from "react";
 import CustomToastr from "../components/CustomToastr";
 
 const ToastrContext = createContext();
@@ -70,16 +76,19 @@ export const ToastrProvider = ({ children }) => {
     [addToast]
   );
 
-  const value = {
-    addToast,
-    removeToast,
-    showSuccess,
-    showError,
-    showWarning,
-    showInfo,
-  };
+  const value = useMemo(
+    () => ({
+      addToast,
+      removeToast,
+      showSuccess,
+      showError,
+      showWarning,
+      showInfo,
+    }),
+    [addToast, removeToast, showSuccess, showError, showWarning, showInfo]
+  );
 
-  // Group toasts by position for better stacking
+  // Group toasts by position for stacking
   const groupedToasts = toasts.reduce((acc, toast) => {
     if (!acc[toast.position]) {
       acc[toast.position] = [];
@@ -91,13 +100,12 @@ export const ToastrProvider = ({ children }) => {
   return (
     <ToastrContext.Provider value={value}>
       {children}
-      {/* Render all toasts with staggered positioning */}
+      {/* Render all toasts stacked in the same position */}
       {Object.entries(groupedToasts).map(([position, positionToasts]) =>
         positionToasts.map((toast, index) => (
           <div
             key={toast.id}
             style={{
-              transform: `translateY(${index * 80}px)`,
               zIndex: 50 + index,
             }}
           >
