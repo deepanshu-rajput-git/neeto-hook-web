@@ -16,7 +16,9 @@ const Sidebar = () => {
 
   const getLinkClass = (path) => {
     const isActive =
-      location.pathname === path || location.pathname.startsWith(path);
+      location.pathname === path ||
+      (path === "/dashboard" && location.pathname.startsWith("/hooks")) ||
+      (path !== "/dashboard" && location.pathname.startsWith(path));
     return isActive
       ? "bg-green-500 text-white shadow-sm"
       : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800";

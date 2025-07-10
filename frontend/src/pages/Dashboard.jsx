@@ -92,11 +92,6 @@ const Dashboard = ({
           <DownloadWebhooksButton inboxId={activeInbox.uuid} />
         )}
       </div>
-      {Array.isArray(hooks) && hooks.length === 0 && (
-        <div className='text-gray-500 dark:text-gray-400 mb-4'>
-          No webhooks received yet.
-        </div>
-      )}
       <HookTable hooks={hooks} />
       <Toast
         message={toastMessage}

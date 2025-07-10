@@ -33,7 +33,7 @@ const HookTable = ({ hooks }) => {
           </tr>
         </thead>
         <tbody className='divide-y divide-gray-200 dark:divide-gray-700'>
-          {Array.isArray(hooks) &&
+          {Array.isArray(hooks) && hooks.length > 0 ? (
             hooks.map((hook) => (
               <tr
                 key={hook.id}
@@ -66,7 +66,17 @@ const HookTable = ({ hooks }) => {
                   </Link>
                 </td>
               </tr>
-            ))}
+            ))
+          ) : (
+            <tr>
+              <td
+                colSpan='5'
+                className='py-8 px-6 text-center text-gray-500 dark:text-gray-400'
+              >
+                No webhooks received yet.
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>
