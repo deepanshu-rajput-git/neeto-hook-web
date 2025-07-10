@@ -1,4 +1,5 @@
 class WebhookInbox < ApplicationRecord
+  belongs_to :workspace, optional: true
   has_many :webhook_requests, dependent: :destroy
   has_many :transformation_rules, dependent: :destroy
   before_create :set_uuid

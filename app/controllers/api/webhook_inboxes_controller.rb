@@ -12,7 +12,9 @@ class Api::WebhookInboxesController < ApplicationController
   end
 
   def create
-    @webhook_inbox = WebhookInbox.new
+    workspace = Workspace.first # Or current_user.workspace if using authentication
+
+    @webhook_inbox = WebhookInbox.new(workspace: workspace)
 
     if @webhook_inbox.save
       render json: @webhook_inbox, serializer: WebhookInboxSerializer, status: :created
