@@ -9,7 +9,8 @@
   "scripts": {
     "dev": "concurrently \"bundle exec rails s\" \"npm run dev --prefix frontend\"",
     "install": "bundle install && npm install --prefix frontend",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm run build --prefix frontend && mv ./frontend/dist ./public "
   },
   "keywords": [],
   "author": "",
