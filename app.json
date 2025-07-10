@@ -1,0 +1,48 @@
+{
+  "name": "neeto-hook-web",
+  "description": "A web application for managing webhooks.",
+  "keywords": [
+    "rails",
+    "react",
+    "webhook"
+  ],
+  "website": "https://github.com/neetozone/neeto-hook-web",
+  "repository": "https://github.com/neetozone/neeto-hook-web",
+  "logo": "https://neeto-hook-web.neetodeploy.com/neetoWebhooks.png",
+  "success_url": "/dashboard",
+  "scripts": {
+    "postdeploy": "bundle exec rails db:migrate"
+  },
+  "env": {
+    "RAILS_ENV": {
+      "description": "Rails environment.",
+      "value": "production"
+    },
+    "RAILS_LOG_TO_STDOUT": {
+      "description": "Log to stdout.",
+      "value": "enabled"
+    },
+    "RAILS_SERVE_STATIC_FILES": {
+      "description": "Serve static files.",
+      "value": "enabled"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "standard-1x"
+    }
+  },
+  "addons": [
+    "heroku-postgresql",
+    "heroku-redis"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    },
+    {
+      "url": "heroku/ruby"
+    }
+  ]
+}
