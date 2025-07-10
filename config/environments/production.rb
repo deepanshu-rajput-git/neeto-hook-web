@@ -89,7 +89,10 @@ Rails.application.configure do
   config.hosts = [
     "neeto-hook-web.neetodeploy.com",
     "localhost",
-    /.*\.neetodeploy\.com/
+    /.*\.neetodeploy\.com/,
+    /192\.168\.\d+\.\d+/,  # Allow internal network IPs for health checks
+    /10\.\d+\.\d+\.\d+/,   # Allow 10.x.x.x IPs
+    /172\.\d+\.\d+\.\d+/   # Allow 172.x.x.x IPs
   ]
 
   # Skip DNS rebinding protection for the default health check endpoint.
