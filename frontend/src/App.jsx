@@ -13,7 +13,10 @@ import Sidebar from "./components/Sidebar";
 import cable from "./services/cable";
 
 function App() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const saved = localStorage.getItem("darkMode");
+    return saved ? JSON.parse(saved) : false; // Default to light theme
+  });
   const [activeInbox, setActiveInbox] = useState(null);
   const [loading, setLoading] = useState(true);
   const [hooks, setHooks] = useState([]);
@@ -32,6 +35,7 @@ function App() {
     } else {
       document.documentElement.classList.remove("dark");
     }
+    localStorage.setItem("darkMode", JSON.stringify(isDarkMode));
   }, [isDarkMode]);
 
   useEffect(() => {
@@ -153,12 +157,12 @@ function App() {
   }, [activeInbox, fetchStats]);
 
   const MainLayout = ({ children }) => (
-    <div className="flex flex-col h-screen bg-gray-50 dark:bg-gray-900">
+    <div className='flex flex-col h-screen bg-white dark:bg-gray-900'>
       <ToastContainer />
       <HeaderBar isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
-      <div className="flex flex-1 overflow-hidden">
+      <div className='flex flex-1 overflow-hidden'>
         <Sidebar />
-        <main className="flex-1 p-6 overflow-y-auto">{children}</main>
+        <main className='flex-1 p-6 overflow-y-auto'>{children}</main>
       </div>
     </div>
   );
@@ -166,14 +170,14 @@ function App() {
   return (
     <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        <Route path='/' element={<LandingPage />} />
         <Route
-          path="/*"
+          path='/*'
           element={
             <MainLayout>
               <Routes>
                 <Route
-                  path="dashboard"
+                  path='dashboard'
                   element={
                     <Dashboard
                       activeInbox={activeInbox}
@@ -188,11 +192,17 @@ function App() {
                   }
                 />
                 <Route
-                  path="hooks/:id"
-                  element={<HookDetails activeInbox={activeInbox} setToastMessage={setToastMessage} setShowToast={setShowToast} />}
+                  path='hooks/:id'
+                  element={
+                    <HookDetails
+                      activeInbox={activeInbox}
+                      setToastMessage={setToastMessage}
+                      setShowToast={setShowToast}
+                    />
+                  }
                 />
                 <Route
-                  path="transformations"
+                  path='transformations'
                   element={
                     <Transformations
                       activeInbox={activeInbox}

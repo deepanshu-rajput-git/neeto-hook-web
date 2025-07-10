@@ -98,10 +98,10 @@ payload.username = payload.user_name.split(" ")[0];`,
   if (loading) {
     return (
       <div>
-        <h1 className='text-3xl font-bold text-gray-900 dark:text-white mb-6'>
+        <h1 className='text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6'>
           Payload Transformations
         </h1>
-        <p className='text-gray-500 dark:text-gray-400'>
+        <p className='text-gray-600 dark:text-gray-300'>
           Loading transformation rules...
         </p>
       </div>
@@ -110,12 +110,12 @@ payload.username = payload.user_name.split(" ")[0];`,
 
   return (
     <div>
-      <h1 className='text-3xl font-bold text-gray-900 dark:text-white mb-6'>
+      <h1 className='text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6'>
         Payload Transformations
       </h1>
 
-      <div className='bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-8'>
-        <h2 className='text-xl font-bold text-gray-900 dark:text-white mb-4'>
+      <div className='bg-white dark:bg-gray-900 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 mb-8'>
+        <h2 className='text-xl font-bold text-gray-900 dark:text-gray-100 mb-4'>
           Create New Rule
         </h2>
         <form onSubmit={handleCreateRule}>
@@ -127,7 +127,7 @@ payload.username = payload.user_name.split(" ")[0];`,
               type='text'
               value={newRule.name}
               onChange={(e) => setNewRule({ ...newRule, name: e.target.value })}
-              className='mt-1 block w-full bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-green-500 focus:border-transparent sm:text-sm p-2'
+              className='mt-1 block w-full bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-green-500 focus:border-transparent sm:text-sm p-2 text-gray-900 dark:text-gray-100'
               placeholder='e.g., "Format User Data"'
               required
             />
@@ -136,7 +136,7 @@ payload.username = payload.user_name.split(" ")[0];`,
             <label className='block text-sm font-medium text-gray-600 dark:text-gray-300'>
               Transformation Logic (JavaScript)
             </label>
-            <p className='text-xs text-gray-500 mb-2'>
+            <p className='text-xs text-gray-600 dark:text-gray-300 mb-2'>
               Modify the <code>payload</code> object. It will be automatically
               stringified.
             </p>
@@ -152,7 +152,7 @@ payload.username = payload.user_name.split(" ")[0];`,
           </div>
           <button
             type='submit'
-            className='inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-600'
+            className='inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200'
           >
             Create Rule
           </button>
@@ -160,46 +160,48 @@ payload.username = payload.user_name.split(" ")[0];`,
       </div>
 
       <div>
-        <h2 className='text-xl font-bold text-gray-900 dark:text-white mb-4'>
+        <h2 className='text-xl font-bold text-gray-900 dark:text-gray-100 mb-4'>
           Existing Rules
         </h2>
         <div className='space-y-4'>
           {rules.length === 0 ? (
-            <p className='text-gray-500'>No transformation rules found.</p>
+            <p className='text-gray-600 dark:text-gray-300'>
+              No transformation rules found.
+            </p>
           ) : (
             rules.map((rule) => (
               <div
                 key={rule.id}
-                className='bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md flex justify-between items-center'
+                className='bg-white dark:bg-gray-900 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex justify-between items-center'
               >
                 <div>
-                  <p className='font-bold text-gray-900 dark:text-white'>
+                  <p className='font-bold text-gray-900 dark:text-gray-100'>
                     {rule.name}
                   </p>
-                  <p className='text-sm text-gray-600'>
+                  <p className='text-sm text-gray-600 dark:text-gray-300'>
                     Type: {rule.rule_type}
                   </p>
                 </div>
                 <div className='flex items-center space-x-4'>
                   <button
                     onClick={() => handleToggleRule(rule)}
-                    className={`px-4 py-2 text-sm font-medium rounded-md ${
+                    className={`px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${
                       rule.is_enabled
-                        ? "bg-green-500 text-white"
-                        : "bg-gray-200 dark:bg-gray-600 text-gray-600"
+                        ? "bg-green-600 text-white hover:bg-green-700"
+                        : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
                     }`}
                   >
                     {rule.is_enabled ? "Enabled" : "Disabled"}
                   </button>
                   <button
                     onClick={() => handleEditRule(rule)}
-                    className='text-blue-500 hover:underline'
+                    className='text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 hover:underline transition-colors duration-200'
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => handleDeleteRule(rule.id)}
-                    className='text-red-500 hover:underline'
+                    className='text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 hover:underline transition-colors duration-200'
                   >
                     Delete
                   </button>

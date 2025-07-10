@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 
 const Toast = ({ message, show, onHide }) => {
   useEffect(() => {
@@ -15,7 +15,7 @@ const Toast = ({ message, show, onHide }) => {
   }
 
   return (
-    <div className="fixed bottom-4 right-4 bg-green-700 text-white py-2 px-4 rounded-lg shadow-lg">
+    <div className='fixed bottom-4 right-4 bg-green-600 text-white py-2 px-4 rounded-lg shadow-lg border border-green-500'>
       {message}
     </div>
   );

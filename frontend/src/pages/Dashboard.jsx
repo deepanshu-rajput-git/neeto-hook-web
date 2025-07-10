@@ -2,13 +2,14 @@ import React from "react";
 import HookTable from "../components/HookTable";
 import Toast from "../components/Toast";
 import DownloadWebhooksButton from "../components/DownloadWebhooksButton";
+import { ClipboardDocumentIcon } from "@heroicons/react/24/outline";
 
 const StatCard = ({ title, value }) => (
-  <div className='bg-white dark:bg-gray-700 p-4 rounded-lg shadow'>
-    <h3 className='text-sm font-medium text-gray-500 dark:text-gray-400'>
+  <div className='bg-white dark:bg-gray-900 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700'>
+    <h3 className='text-sm font-medium text-gray-600 dark:text-gray-300'>
       {title}
     </h3>
-    <p className='mt-1 text-3xl font-semibold text-gray-900 dark:text-white'>
+    <p className='mt-1 text-3xl font-semibold text-gray-900 dark:text-gray-100'>
       {value}
     </p>
   </div>
@@ -28,7 +29,7 @@ const Dashboard = ({
     ? `${window.location.origin}/api/hooks/${activeInbox.uuid}`
     : "";
 
-  const copyToClipboard = () => {
+  const handleCopyUrl = () => {
     navigator.clipboard.writeText(webhookUrl).then(() => {
       setToastMessage("Webhook URL copied to clipboard!");
       setShowToast(true);
@@ -38,10 +39,10 @@ const Dashboard = ({
   if (loading) {
     return (
       <div>
-        <h1 className='text-3xl font-bold text-gray-900 dark:text-white mb-6'>
+        <h1 className='text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6'>
           Dashboard
         </h1>
-        <p className='text-gray-500 dark:text-gray-400'>
+        <p className='text-gray-600 dark:text-gray-300'>
           Initializing your webhook inbox...
         </p>
       </div>
@@ -51,7 +52,7 @@ const Dashboard = ({
   return (
     <div>
       <div className='flex justify-between items-center mb-6'>
-        <h1 className='text-3xl font-bold text-gray-900 dark:text-white'>
+        <h1 className='text-3xl font-bold text-gray-900 dark:text-gray-100'>
           {activeInbox?.name || "Webhook Inbox"}
         </h1>
       </div>
@@ -65,7 +66,7 @@ const Dashboard = ({
 
       <div className='bg-gray-100 dark:bg-gray-800 p-4 rounded-lg mb-6'>
         <label className='text-sm font-medium text-gray-700 dark:text-gray-300'>
-          Your unique webhook URL
+          Webhook URL
         </label>
         <div className='flex items-center mt-1'>
           <input
@@ -75,17 +76,17 @@ const Dashboard = ({
             className='flex-grow p-2 border border-gray-300 rounded-l-md bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 focus:outline-none'
           />
           <button
-            onClick={copyToClipboard}
-            className='p-2 border border-l-0 border-green-700 bg-green-700 text-white rounded-r-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50'
+            onClick={handleCopyUrl}
+            className='p-2 border border-l-0 border-green-600 bg-green-600 text-white rounded-r-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 transition-colors duration-200'
           >
-            Copy
+            <ClipboardDocumentIcon className='h-5 w-5' />
           </button>
         </div>
       </div>
 
       <div className='flex justify-between items-center mb-4'>
-        <h2 className='text-2xl font-bold text-gray-900 dark:text-white'>
-          Received Webhooks
+        <h2 className='text-2xl font-bold text-gray-900 dark:text-gray-100'>
+          Recent Webhooks
         </h2>
         {Array.isArray(hooks) && hooks.length > 0 && (
           <DownloadWebhooksButton inboxId={activeInbox.uuid} />

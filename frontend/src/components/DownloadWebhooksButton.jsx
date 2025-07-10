@@ -31,9 +31,9 @@ const DownloadWebhooksButton = ({ inboxId }) => {
     <button
       onClick={handleDownload}
       disabled={isDownloading}
-      className="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-600 disabled:bg-green-300"
+      className='bg-green-600 text-white px-3 py-1.5 rounded-md text-sm font-medium hover:bg-green-700 disabled:bg-green-300 disabled:cursor-not-allowed transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 shadow-sm'
     >
-      {isDownloading ? "Downloading..." : "Download Webhooks"}
+      {isDownloading ? "Downloading..." : "Download webhooks"}
     </button>
   );
 };
