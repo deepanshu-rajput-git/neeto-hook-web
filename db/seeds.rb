@@ -2,10 +2,13 @@
 # development, test). The code here should be idempotent so that it can be executed at any point in every environment.
 # The data can then be loaded with the bin/rails db:seed command.
 
-TransformationRule.find_or_create_by!(name: "Extract Email") do |rule|
+# Create a test inbox
+test_inbox = WebhookInbox.find_or_create_by!(uuid: '123e4567-e89b-12d3-a456-426614174000')
+
+TransformationRule.find_or_create_by!(name: "Extract Email", webhook_inbox: test_inbox) do |rule|
   rule.rule_type = "JS"
   rule.body = <<-JS
-// Extracts email from user_name and sets it as a new email field
+# Extracts email from user_name and sets it as a new email field
 const emailMatch = payload.user_name.match(/\(([^)]+)\)/);
 if (emailMatch) {
   payload.email = emailMatch[1];
@@ -13,9 +16,6 @@ if (emailMatch) {
   JS
   rule.is_enabled = true
 end
-
-# Create a test inbox
-test_inbox = WebhookInbox.find_or_create_by!(uuid: '123e4567-e89b-12d3-a456-426614174000')
 
 # Create a few sample webhook requests
 2.times do |i|

@@ -12,7 +12,12 @@ class Api::WebhookInboxesController < ApplicationController
   end
 
   def create
-    @webhook_inbox = WebhookInbox.create!
-    render json: @webhook_inbox, serializer: WebhookInboxSerializer, status: :created
+    @webhook_inbox = WebhookInbox.new
+
+    if @webhook_inbox.save
+      render json: @webhook_inbox, serializer: WebhookInboxSerializer, status: :created
+    else
+      render json: { error: "Failed to create inbox", errors: @webhook_inbox.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 end

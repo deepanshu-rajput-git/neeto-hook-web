@@ -1,7 +1,7 @@
 import React from 'react';
 import FormattedJsonViewer from './FormattedJsonViewer';
 
-const HookDetailsViewer = ({ hook }) => {
+const HookDetailsViewer = ({ hook, setToastMessage, setShowToast }) => {
   if (!hook) {
     return <div className="text-center p-8 text-gray-600">Loading...</div>;
   }
@@ -35,6 +35,11 @@ const HookDetailsViewer = ({ hook }) => {
     return headers;
   };
 
+  const copyToClipboard = (text, type) => {
+    navigator.clipboard.writeText(text);
+    setToastMessage(`${type} copied to clipboard!`);
+    setShowToast(true);
+  };
 
   const parsedHeaders = parseHeaders(hook.headers);
   const parsedBody = safeParse(hook.body);
@@ -42,9 +47,25 @@ const HookDetailsViewer = ({ hook }) => {
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 max-w-5xl mx-auto overflow-hidden">
-      <h2 className="text-2xl font-bold text-white bg-gray-800 -mx-6 -mt-6 mb-6 p-4 rounded-t-lg">
-        Webhook Details
-      </h2>
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold text-white bg-gray-800 -mx-6 -mt-6 mb-6 p-4 rounded-t-lg">
+          Webhook Details
+        </h2>
+        <button
+          onClick={() => {
+            const data = JSON.stringify(hook, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `webhook-${hook.id}.json`;
+            link.click();
+          }}
+          className="bg-green-600 text-white px-3 py-1.5 rounded-md font-semibold hover:bg-green-700 transition-all duration-300 flex items-center group"
+        >
+          Download
+        </button>
+      </div>
 
       <div className="mb-6 border-b border-gray-200 dark:border-gray-700 pb-4">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Request Info</h3>
@@ -67,7 +88,15 @@ const HookDetailsViewer = ({ hook }) => {
       </div>
 
       <div className="mb-6">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Headers</h3>
+        <div className="flex justify-between items-center mb-2">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Headers</h3>
+          <button
+            onClick={() => copyToClipboard(JSON.stringify(parsedHeaders, null, 2), 'Headers')}
+            className="text-sm text-green-600 hover:text-green-700"
+          >
+            Copy
+          </button>
+        </div>
         <pre className="overflow-auto max-h-[600px] bg-gray-100 rounded p-4 text-sm font-mono whitespace-pre-wrap break-words">
           {JSON.stringify(parsedHeaders, null, 2)}
         </pre>
@@ -75,15 +104,31 @@ const HookDetailsViewer = ({ hook }) => {
 
       {parsedOriginalBody && (
         <div className="mb-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Original Body</h3>
+          <div className="flex justify-between items-center mb-2">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Original Body</h3>
+            <button
+              onClick={() => copyToClipboard(JSON.stringify(parsedOriginalBody, null, 2), 'Original Body')}
+              className="text-sm text-green-600 hover:text-green-700"
+            >
+              Copy
+            </button>
+          </div>
           <FormattedJsonViewer data={parsedOriginalBody} />
         </div>
       )}
 
       <div className="mb-6">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-          {parsedOriginalBody ? 'Transformed Body' : 'Body'}
-        </h3>
+        <div className="flex justify-between items-center mb-2">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+            {parsedOriginalBody ? 'Transformed Body' : 'Body'}
+          </h3>
+          <button
+            onClick={() => copyToClipboard(JSON.stringify(parsedBody, null, 2), 'Body')}
+            className="text-sm text-green-600 hover:text-green-700"
+          >
+            Copy
+          </button>
+        </div>
         <FormattedJsonViewer data={parsedBody} />
       </div>
     </div>

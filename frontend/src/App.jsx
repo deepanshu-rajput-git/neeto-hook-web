@@ -189,7 +189,7 @@ function App() {
                 />
                 <Route
                   path="hooks/:id"
-                  element={<HookDetails activeInbox={activeInbox} />}
+                  element={<HookDetails activeInbox={activeInbox} setToastMessage={setToastMessage} setShowToast={setShowToast} />}
                 />
                 <Route
                   path="transformations"

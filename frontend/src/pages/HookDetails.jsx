@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import HookDetailsViewer from '../components/HookDetailsViewer';
 
-const HookDetails = ({ activeInbox }) => {
+const HookDetails = ({ activeInbox, setToastMessage, setShowToast }) => {
   const { id } = useParams();
   const [hook, setHook] = useState(null);
 
@@ -24,7 +24,7 @@ const HookDetails = ({ activeInbox }) => {
 
   return (
     <div>
-      <HookDetailsViewer hook={hook} />
+      <HookDetailsViewer hook={hook} setToastMessage={setToastMessage} setShowToast={setShowToast} />
     </div>
   );
 };

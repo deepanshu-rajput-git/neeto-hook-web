@@ -64,7 +64,10 @@ function LandingPage() {
       >
         <div className="container mx-auto px-6 py-4">
           <nav className="flex items-center justify-between">
-            <Logo />
+            <Link to="/" className="flex items-center space-x-3">
+              <Logo />
+              <h1 className="text-xl font-bold text-gray-900">NeetoWebhooks</h1>
+            </Link>
             <div className="flex items-center space-x-6">
               <Link
                 to="/dashboard"
