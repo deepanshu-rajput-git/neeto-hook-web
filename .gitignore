@@ -34,3 +34,13 @@
 # Ignore node_modules
 /node_modules
 playwright-mcp/
+
+# Frontend build artifacts
+/frontend/node_modules
+/frontend/dist
+/public/assets
+/public/index.html
+/public/vite.svg
+
+# Keep robots.txt and other static files
+!/public/robots.txt
