@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useCallback, memo } from "react";
 import FormattedJsonViewer from "./FormattedJsonViewer";
 import { useToastr } from "../contexts/ToastrContext";
 
-const HookDetailsViewer = ({ hook }) => {
+const HookDetailsViewer = memo(({ hook }) => {
   const { showSuccess } = useToastr();
 
   if (!hook) {
@@ -13,15 +13,15 @@ const HookDetailsViewer = ({ hook }) => {
     );
   }
 
-  const safeParse = (data) => {
+  const safeParse = useCallback((data) => {
     try {
       return typeof data === "string" ? JSON.parse(data) : data;
     } catch {
       return data;
     }
-  };
+  }, []);
 
-  const parseHeaders = (headers) => {
+  const parseHeaders = useCallback((headers) => {
     if (typeof headers === "object" && headers !== null) {
       return headers;
     }
@@ -40,12 +40,15 @@ const HookDetailsViewer = ({ hook }) => {
       }
     }
     return headers;
-  };
+  }, []);
 
-  const copyToClipboard = (text, type) => {
-    navigator.clipboard.writeText(text);
-    showSuccess(`${type} copied to clipboard!`);
-  };
+  const copyToClipboard = useCallback(
+    (text, type) => {
+      navigator.clipboard.writeText(text);
+      showSuccess(`${type} copied to clipboard!`);
+    },
+    [showSuccess]
+  );
 
   const parsedHeaders = parseHeaders(hook.headers);
   const parsedBody = safeParse(hook.body);
@@ -53,20 +56,22 @@ const HookDetailsViewer = ({ hook }) => {
     ? safeParse(hook.original_body)
     : null;
 
+  const handleDownload = useCallback(() => {
+    const data = JSON.stringify(hook, null, 2);
+    const blob = new Blob([data], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `webhook-${hook.id}.json`;
+    link.click();
+  }, [hook]);
+
   return (
     <div className='bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 max-w-5xl mx-auto overflow-hidden'>
       <div className='flex justify-between items-center bg-gray-800 dark:bg-gray-800 -mx-6 -mt-6 mb-6 p-4 rounded-t-lg'>
         <h2 className='text-2xl font-bold text-white'>Webhook details</h2>
         <button
-          onClick={() => {
-            const data = JSON.stringify(hook, null, 2);
-            const blob = new Blob([data], { type: "application/json" });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = `webhook-${hook.id}.json`;
-            link.click();
-          }}
+          onClick={handleDownload}
           className='bg-green-600 text-white px-3 py-1.5 rounded-md font-semibold hover:bg-green-700 transition-all duration-300 flex items-center group'
         >
           Download
@@ -140,11 +145,7 @@ const HookDetailsViewer = ({ hook }) => {
               Copy
             </button>
           </div>
-          <FormattedJsonViewer
-            data={parsedOriginalBody}
-            setToastMessage={showSuccess}
-            setShowToast={() => {}} // No longer needed
-          />
+          <FormattedJsonViewer data={parsedOriginalBody} />
         </div>
       )}
 
@@ -162,14 +163,12 @@ const HookDetailsViewer = ({ hook }) => {
             Copy
           </button>
         </div>
-        <FormattedJsonViewer
-          data={parsedBody}
-          setToastMessage={showSuccess}
-          setShowToast={() => {}} // No longer needed
-        />
+        <FormattedJsonViewer data={parsedBody} />
       </div>
     </div>
   );
-};
+});
+
+HookDetailsViewer.displayName = "HookDetailsViewer";
 
 export default HookDetailsViewer;

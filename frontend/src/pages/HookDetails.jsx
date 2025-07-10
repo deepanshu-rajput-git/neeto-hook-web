@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import HookDetailsViewer from "../components/HookDetailsViewer";
 import { useToastr } from "../contexts/ToastrContext";
 
-const HookDetails = ({ activeInbox }) => {
+const HookDetails = memo(({ activeInbox }) => {
   const { id } = useParams();
   const [hook, setHook] = useState(null);
   const { showSuccess } = useToastr();
@@ -26,19 +26,13 @@ const HookDetails = ({ activeInbox }) => {
     fetchHook();
   }, [id, activeInbox]);
 
-  const handleToast = (message) => {
-    showSuccess(message);
-  };
-
   return (
     <div>
-      <HookDetailsViewer
-        hook={hook}
-        setToastMessage={handleToast}
-        setShowToast={() => {}} // No longer needed
-      />
+      <HookDetailsViewer hook={hook} />
     </div>
   );
-};
+});
+
+HookDetails.displayName = "HookDetails";
 
 export default HookDetails;
