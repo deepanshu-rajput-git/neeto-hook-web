@@ -1,7 +1,10 @@
 import React from "react";
 import FormattedJsonViewer from "./FormattedJsonViewer";
+import { useToastr } from "../contexts/ToastrContext";
 
-const HookDetailsViewer = ({ hook, setToastMessage, setShowToast }) => {
+const HookDetailsViewer = ({ hook }) => {
+  const { showSuccess } = useToastr();
+
   if (!hook) {
     return (
       <div className='text-center p-8 text-gray-600 dark:text-gray-300'>
@@ -41,8 +44,7 @@ const HookDetailsViewer = ({ hook, setToastMessage, setShowToast }) => {
 
   const copyToClipboard = (text, type) => {
     navigator.clipboard.writeText(text);
-    setToastMessage(`${type} copied to clipboard!`);
-    setShowToast(true);
+    showSuccess(`${type} copied to clipboard!`);
   };
 
   const parsedHeaders = parseHeaders(hook.headers);
@@ -140,8 +142,8 @@ const HookDetailsViewer = ({ hook, setToastMessage, setShowToast }) => {
           </div>
           <FormattedJsonViewer
             data={parsedOriginalBody}
-            setToastMessage={setToastMessage}
-            setShowToast={setShowToast}
+            setToastMessage={showSuccess}
+            setShowToast={() => {}} // No longer needed
           />
         </div>
       )}
@@ -162,8 +164,8 @@ const HookDetailsViewer = ({ hook, setToastMessage, setShowToast }) => {
         </div>
         <FormattedJsonViewer
           data={parsedBody}
-          setToastMessage={setToastMessage}
-          setShowToast={setShowToast}
+          setToastMessage={showSuccess}
+          setShowToast={() => {}} // No longer needed
         />
       </div>
     </div>

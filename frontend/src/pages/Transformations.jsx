@@ -4,8 +4,10 @@ import { javascript } from "@codemirror/lang-javascript";
 import { okaidia } from "@uiw/codemirror-theme-okaidia";
 import axios from "axios";
 import EditRuleModal from "../components/EditRuleModal";
+import { useToastr } from "../contexts/ToastrContext";
 
-const Transformations = ({ activeInbox, loading }) => {
+const Transformations = () => {
+  const { showSuccess, showError } = useToastr();
   const [rules, setRules] = useState([]);
   const [newRule, setNewRule] = useState({
     name: "",
@@ -16,31 +18,42 @@ payload.username = payload.user_name.split(" ")[0];`,
   });
   const [editingRule, setEditingRule] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const fetchRules = useCallback(async () => {
     try {
+      // Get the active inbox from localStorage
+      const inboxUUID = localStorage.getItem("webhook_inbox_uuid");
+      if (!inboxUUID) {
+        showError("No webhook inbox found. Please refresh the page.");
+        setLoading(false);
+        return;
+      }
+
       const response = await axios.get(
-        `/api/webhook_inboxes/${activeInbox.uuid}/transformation_rules`
+        `/api/webhook_inboxes/${inboxUUID}/transformation_rules`
       );
       const fetchedRules = response.data.transformation_rules || [];
       setRules(fetchedRules);
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching transformation rules:", error);
+      showError("Failed to load transformation rules");
       setRules([]); // fallback to empty array on error
+      setLoading(false);
     }
-  }, [activeInbox]);
+  }, [showError]);
 
   useEffect(() => {
-    if (activeInbox) {
-      fetchRules();
-    }
-  }, [activeInbox, fetchRules]);
+    fetchRules();
+  }, [fetchRules]);
 
   const handleCreateRule = async (e) => {
     e.preventDefault();
     try {
+      const inboxUUID = localStorage.getItem("webhook_inbox_uuid");
       await axios.post(
-        `/api/webhook_inboxes/${activeInbox.uuid}/transformation_rules`,
+        `/api/webhook_inboxes/${inboxUUID}/transformation_rules`,
         {
           transformation_rule: newRule,
         }
@@ -51,8 +64,10 @@ payload.username = payload.user_name.split(" ")[0];`,
         rule_type: "JS",
         body: 'payload.new_field = "transformed";',
       });
+      showSuccess("Transformation rule created successfully!");
     } catch (error) {
       console.error("Error creating transformation rule:", error);
+      showError("Failed to create transformation rule");
     }
   };
 
@@ -60,8 +75,10 @@ payload.username = payload.user_name.split(" ")[0];`,
     try {
       await axios.delete(`/api/transformation_rules/${id}`);
       fetchRules();
+      showSuccess("Transformation rule deleted successfully!");
     } catch (error) {
       console.error("Error deleting transformation rule:", error);
+      showError("Failed to delete transformation rule");
     }
   };
 
@@ -72,8 +89,12 @@ payload.username = payload.user_name.split(" ")[0];`,
         transformation_rule: updatedRule,
       });
       fetchRules();
+      showSuccess(
+        `Rule ${updatedRule.is_enabled ? "enabled" : "disabled"} successfully!`
+      );
     } catch (error) {
       console.error("Error toggling transformation rule:", error);
+      showError("Failed to update rule status");
     }
   };
 
@@ -90,8 +111,10 @@ payload.username = payload.user_name.split(" ")[0];`,
       fetchRules();
       setIsModalOpen(false);
       setEditingRule(null);
+      showSuccess("Transformation rule updated successfully!");
     } catch (error) {
       console.error("Error updating transformation rule:", error);
+      showError("Failed to update transformation rule");
     }
   };
 

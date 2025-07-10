@@ -1,8 +1,8 @@
 import React from "react";
 import HookTable from "../components/HookTable";
-import Toast from "../components/Toast";
 import DownloadWebhooksButton from "../components/DownloadWebhooksButton";
 import { ClipboardDocumentIcon } from "@heroicons/react/24/outline";
+import { useToastr } from "../contexts/ToastrContext";
 
 const StatCard = ({ title, value }) => (
   <div className='bg-white dark:bg-gray-900 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700'>
@@ -15,24 +15,16 @@ const StatCard = ({ title, value }) => (
   </div>
 );
 
-const Dashboard = ({
-  activeInbox,
-  loading,
-  hooks,
-  stats,
-  toastMessage,
-  showToast,
-  setToastMessage,
-  setShowToast,
-}) => {
+const Dashboard = ({ activeInbox, loading, hooks, stats }) => {
+  const { showSuccess } = useToastr();
+
   const webhookUrl = activeInbox
     ? `${window.location.origin}/api/hooks/${activeInbox.uuid}`
     : "";
 
   const handleCopyUrl = () => {
     navigator.clipboard.writeText(webhookUrl).then(() => {
-      setToastMessage("Webhook URL copied to clipboard!");
-      setShowToast(true);
+      showSuccess("Webhook URL copied to clipboard!");
     });
   };
 
@@ -93,11 +85,6 @@ const Dashboard = ({
         )}
       </div>
       <HookTable hooks={hooks} />
-      <Toast
-        message={toastMessage}
-        show={showToast}
-        onHide={() => setShowToast(false)}
-      />
     </div>
   );
 };

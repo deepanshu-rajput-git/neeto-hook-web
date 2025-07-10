@@ -2,13 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import HookDetailsViewer from "../components/HookDetailsViewer";
-import LocalToast from "../components/LocalToast";
+import { useToastr } from "../contexts/ToastrContext";
 
-const HookDetails = ({ activeInbox, setToastMessage, setShowToast }) => {
+const HookDetails = ({ activeInbox }) => {
   const { id } = useParams();
   const [hook, setHook] = useState(null);
-  const [localToastMessage, setLocalToastMessage] = useState("");
-  const [showLocalToast, setShowLocalToast] = useState(false);
+  const { showSuccess } = useToastr();
 
   useEffect(() => {
     if (!activeInbox) return;
@@ -27,27 +26,16 @@ const HookDetails = ({ activeInbox, setToastMessage, setShowToast }) => {
     fetchHook();
   }, [id, activeInbox]);
 
-  const handleLocalToast = (message) => {
-    setLocalToastMessage(message);
-    setShowLocalToast(true);
-  };
-
-  const handleToastClose = () => {
-    setShowLocalToast(false);
-    setLocalToastMessage("");
+  const handleToast = (message) => {
+    showSuccess(message);
   };
 
   return (
     <div>
-      <LocalToast
-        message={localToastMessage}
-        show={showLocalToast}
-        onClose={handleToastClose}
-      />
       <HookDetailsViewer
         hook={hook}
-        setToastMessage={handleLocalToast}
-        setShowToast={setShowLocalToast}
+        setToastMessage={handleToast}
+        setShowToast={() => {}} // No longer needed
       />
     </div>
   );

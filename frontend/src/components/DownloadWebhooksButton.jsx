@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { fetchWebhooksForInbox } from "../utils/api";
-import { toast } from "react-toastify";
+import { useToastr } from "../contexts/ToastrContext";
 
 const DownloadWebhooksButton = ({ inboxId }) => {
   const [isDownloading, setIsDownloading] = useState(false);
+  const { showSuccess, showError } = useToastr();
 
   const handleDownload = async () => {
     setIsDownloading(true);
@@ -19,9 +20,9 @@ const DownloadWebhooksButton = ({ inboxId }) => {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      toast.success("Webhooks downloaded successfully!");
+      showSuccess("Webhooks downloaded successfully!");
     } catch (error) {
-      toast.error("Failed to download webhooks.");
+      showError("Failed to download webhooks.");
     } finally {
       setIsDownloading(false);
     }

@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import axios from "axios";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 import LandingPage from "./pages/LandingPage";
 import Dashboard from "./pages/Dashboard";
@@ -10,9 +8,11 @@ import HookDetails from "./pages/HookDetails";
 import Transformations from "./pages/Transformations";
 import HeaderBar from "./components/HeaderBar";
 import Sidebar from "./components/Sidebar";
+import { ToastrProvider, useToastr } from "./contexts/ToastrContext";
 import cable from "./services/cable";
 
-function App() {
+function AppContent() {
+  const { showSuccess, showError } = useToastr();
   const [isDarkMode, setIsDarkMode] = useState(() => {
     const saved = localStorage.getItem("darkMode");
     return saved ? JSON.parse(saved) : false; // Default to light theme
@@ -26,8 +26,6 @@ function App() {
     successful_hooks: 0,
     failed_hooks: 0,
   });
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
 
   useEffect(() => {
     if (isDarkMode) {
@@ -129,10 +127,9 @@ function App() {
         },
         disconnected: () => {
           console.log("Disconnected from Action Cable channel.");
-          setToastMessage(
+          showError(
             "Real-time connection failed. Please check if your Redis server is running."
           );
-          setShowToast(true);
         },
         received: (data) => {
           if (data.webhook_request) {
@@ -142,10 +139,9 @@ function App() {
 
             setHooks((prevHooks) => [data.webhook_request, ...prevHooks]);
             fetchStats();
-            setToastMessage(
+            showSuccess(
               `New webhook received: #${data.webhook_request.id} (Latency: ${currentLatency}ms)`
             );
-            setShowToast(true);
           }
         },
       }
@@ -154,11 +150,10 @@ function App() {
     return () => {
       channel.unsubscribe();
     };
-  }, [activeInbox, fetchStats]);
+  }, [activeInbox, fetchStats, showSuccess, showError]);
 
   const MainLayout = ({ children }) => (
     <div className='flex flex-col h-screen bg-white dark:bg-gray-900'>
-      <ToastContainer />
       <HeaderBar isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
       <div className='flex flex-1 overflow-hidden'>
         <Sidebar />
@@ -184,38 +179,28 @@ function App() {
                       loading={loading}
                       hooks={hooks}
                       stats={stats}
-                      toastMessage={toastMessage}
-                      showToast={showToast}
-                      setToastMessage={setToastMessage}
-                      setShowToast={setShowToast}
                     />
                   }
                 />
                 <Route
                   path='hooks/:id'
-                  element={
-                    <HookDetails
-                      activeInbox={activeInbox}
-                      setToastMessage={setToastMessage}
-                      setShowToast={setShowToast}
-                    />
-                  }
+                  element={<HookDetails activeInbox={activeInbox} />}
                 />
-                <Route
-                  path='transformations'
-                  element={
-                    <Transformations
-                      activeInbox={activeInbox}
-                      loading={loading}
-                    />
-                  }
-                />
+                <Route path='transformations' element={<Transformations />} />
               </Routes>
             </MainLayout>
           }
         />
       </Routes>
     </Router>
+  );
+}
+
+function App() {
+  return (
+    <ToastrProvider>
+      <AppContent />
+    </ToastrProvider>
   );
 }
 

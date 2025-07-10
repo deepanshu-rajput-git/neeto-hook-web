@@ -1,27 +1,27 @@
 import React from "react";
 import JsonView from "@microlink/react-json-view";
+import { useToastr } from "../contexts/ToastrContext";
 
-const FormattedJsonViewer = ({ data, initiallyExpandedLevel = 2, setToastMessage, setShowToast }) => {
+const FormattedJsonViewer = ({ data, initiallyExpandedLevel = 2 }) => {
+  const { showSuccess } = useToastr();
+
   if (!data) {
     return (
-      <div className="p-4 text-sm font-mono text-red-500">
+      <div className='p-4 text-sm font-mono text-red-500'>
         Invalid JSON format
       </div>
     );
   }
 
   const handleCopy = (copy) => {
-    if (setToastMessage && setShowToast) {
-      setToastMessage("JSON copied to clipboard!");
-      setShowToast(true);
-    }
+    showSuccess("JSON copied to clipboard!");
   };
 
   return (
-    <div className="overflow-auto max-h-[600px] bg-gray-100 rounded p-4 text-sm font-mono">
+    <div className='overflow-auto max-h-[600px] bg-gray-100 dark:bg-gray-800 rounded p-4 text-sm font-mono'>
       <JsonView
         src={data}
-        theme="okaidia"
+        theme='okaidia'
         collapsed={initiallyExpandedLevel}
         displayDataTypes={false}
         enableClipboard
