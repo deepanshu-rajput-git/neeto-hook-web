@@ -85,15 +85,8 @@ Rails.application.configure do
     /https?:\/\/localhost:\d+/
   ]
 
-  # Enable DNS rebinding protection and other `Host` header attacks.
-  config.hosts = [
-    "neeto-hook-web.neetodeploy.com",
-    "localhost",
-    /.*\.neetodeploy\.com/,
-    /192\.168\.\d+\.\d+/,  # Allow internal network IPs for health checks
-    /10\.\d+\.\d+\.\d+/,   # Allow 10.x.x.x IPs
-    /172\.\d+\.\d+\.\d+/   # Allow 172.x.x.x IPs
-  ]
+  # Disable host authorization - allow all hosts
+  config.hosts.clear
 
   # Skip DNS rebinding protection for the default health check endpoint.
   config.host_authorization = { exclude: ->(request) { request.path == "/health_check" } }
