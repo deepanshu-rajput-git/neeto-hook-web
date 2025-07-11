@@ -1,6 +1,6 @@
 import React, { useCallback, memo } from "react";
 import JsonView from "@microlink/react-json-view";
-import { toast } from "react-toastify";
+import { Toastr } from "@bigbinary/neetoui";
 
 const FormattedJsonViewer = memo(({ data, initiallyExpandedLevel = 2 }) => {
   if (!data) {
@@ -12,7 +12,7 @@ const FormattedJsonViewer = memo(({ data, initiallyExpandedLevel = 2 }) => {
   }
 
   const handleCopy = useCallback(() => {
-    toast.success("JSON copied to clipboard!");
+    Toastr.success("JSON copied to clipboard!");
   }, []);
 
   return (

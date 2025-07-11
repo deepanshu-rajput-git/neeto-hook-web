@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Button, Typography } from "@bigbinary/neetoui";
+import { Button, Typography, Toastr } from "@bigbinary/neetoui";
 import { Input, Textarea } from "@bigbinary/neetoui/formik";
 import * as Yup from "yup";
-import { toast } from "react-toastify";
 import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import { okaidia } from "@uiw/codemirror-theme-okaidia";
@@ -26,7 +25,7 @@ const Transformations = () => {
       // Get the active inbox from localStorage
       const inboxUUID = localStorage.getItem("webhook_inbox_uuid");
       if (!inboxUUID) {
-        toast.error("No webhook inbox found. Please refresh the page.");
+        Toastr.error("No webhook inbox found. Please refresh the page.");
         setLoading(false);
         return;
       }
@@ -39,7 +38,7 @@ const Transformations = () => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching transformation rules:", error);
-      toast.error("Failed to load transformation rules");
+      Toastr.error("Failed to load transformation rules");
       setRules([]); // fallback to empty array on error
       setLoading(false);
     }
@@ -64,10 +63,10 @@ const Transformations = () => {
       );
       fetchRules();
       resetForm();
-      toast.success("Transformation rule created successfully!");
+      Toastr.success("Transformation rule created successfully!");
     } catch (error) {
       console.error("Error creating transformation rule:", error);
-      toast.error("Failed to create transformation rule");
+      Toastr.error("Failed to create transformation rule");
     }
   };
 
@@ -75,10 +74,10 @@ const Transformations = () => {
     try {
       await axios.delete(`/api/transformation_rules/${id}`);
       fetchRules();
-      toast.success("Transformation rule deleted successfully!");
+      Toastr.success("Transformation rule deleted successfully!");
     } catch (error) {
       console.error("Error deleting transformation rule:", error);
-      toast.error("Failed to delete transformation rule");
+      Toastr.error("Failed to delete transformation rule");
     }
   };
 
@@ -89,12 +88,12 @@ const Transformations = () => {
         transformation_rule: updatedRule,
       });
       fetchRules();
-      toast.success(
+      Toastr.success(
         `Rule ${updatedRule.is_enabled ? "enabled" : "disabled"} successfully!`
       );
     } catch (error) {
       console.error("Error toggling transformation rule:", error);
-      toast.error("Failed to update rule status");
+      Toastr.error("Failed to update rule status");
     }
   };
 
@@ -111,10 +110,10 @@ const Transformations = () => {
       fetchRules();
       setIsModalOpen(false);
       setEditingRule(null);
-      toast.success("Transformation rule updated successfully!");
+      Toastr.success("Transformation rule updated successfully!");
     } catch (error) {
       console.error("Error updating transformation rule:", error);
-      toast.error("Failed to update transformation rule");
+      Toastr.error("Failed to update transformation rule");
     }
   };
 

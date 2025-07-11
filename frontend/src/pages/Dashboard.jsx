@@ -1,6 +1,5 @@
 import React from "react";
-import { Typography, Button, Input } from "@bigbinary/neetoui";
-import { toast } from "react-toastify";
+import { Typography, Button, Input, Toastr } from "@bigbinary/neetoui";
 import HookTable from "../components/HookTable";
 import DownloadWebhooksButton from "../components/DownloadWebhooksButton";
 import { ClipboardDocumentIcon } from "@heroicons/react/24/outline";
@@ -21,10 +20,26 @@ const Dashboard = ({ activeInbox, loading, hooks, stats }) => {
     ? `${window.location.origin}/api/hooks/${activeInbox.uuid}`
     : "";
 
-  const handleCopyUrl = () => {
-    navigator.clipboard.writeText(webhookUrl).then(() => {
-      toast.success("Webhook URL copied to clipboard!");
-    });
+  const handleCopyUrl = async () => {
+    try {
+      await navigator.clipboard.writeText(webhookUrl);
+      Toastr.success("Webhook URL copied to clipboard!");
+    } catch (error) {
+      console.error("Failed to copy to clipboard:", error);
+      // Fallback for older browsers
+      const textArea = document.createElement("textarea");
+      textArea.value = webhookUrl;
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand("copy");
+        Toastr.success("Webhook URL copied to clipboard!");
+      } catch (fallbackError) {
+        console.error("Fallback copy failed:", fallbackError);
+        Toastr.error("Failed to copy to clipboard");
+      }
+      document.body.removeChild(textArea);
+    }
   };
 
   if (loading) {

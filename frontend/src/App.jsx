@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { Toastr } from "@bigbinary/neetoui";
+import { ToastContainer } from "react-toastify";
 import axios from "axios";
 
 // Simple debounce function
@@ -40,8 +40,8 @@ function AppContent() {
     failed_hooks: 0,
   });
 
-  const showSuccess = useCallback((message) => toast.success(message), []);
-  const showError = useCallback((message) => toast.error(message), []);
+  const showSuccess = useCallback((message) => Toastr.success(message), []);
+  const showError = useCallback((message) => Toastr.error(message), []);
 
   useEffect(() => {
     if (isDarkMode) {
@@ -235,7 +235,7 @@ function App() {
     <>
       <AppContent />
       <ToastContainer
-        position='bottom-right'
+        position="bottom-right"
         autoClose={5000}
         hideProgressBar={false}
         newestOnTop={false}
@@ -244,7 +244,7 @@ function App() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme='light'
+        theme="light"
       />
     </>
   );

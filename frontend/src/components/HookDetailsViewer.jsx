@@ -1,6 +1,5 @@
 import React, { useCallback, memo } from "react";
-import { Typography, Button } from "@bigbinary/neetoui";
-import { toast } from "react-toastify";
+import { Typography, Button, Toastr } from "@bigbinary/neetoui";
 import FormattedJsonViewer from "./FormattedJsonViewer";
 
 const HookDetailsViewer = memo(({ hook }) => {
@@ -43,7 +42,7 @@ const HookDetailsViewer = memo(({ hook }) => {
 
   const copyToClipboard = useCallback((text, type) => {
     navigator.clipboard.writeText(text);
-    toast.success(`${type} copied to clipboard!`);
+    Toastr.success(`${type} copied to clipboard!`);
   }, []);
 
   const parsedHeaders = parseHeaders(hook.headers);

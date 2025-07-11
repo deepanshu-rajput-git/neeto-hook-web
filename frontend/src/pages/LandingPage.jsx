@@ -100,7 +100,7 @@ function LandingPage() {
           transition={{ duration: 0.7 }}
         >
           <Typography as='h1' className='text-4xl md:text-6xl font-extrabold text-gray-900 dark:text-gray-100 leading-tight tracking-tight'>
-            Reliable Webhook Infrastructure
+          Reliable Webhook Infrastructure
           </Typography>
         </motion.div>
         <motion.div

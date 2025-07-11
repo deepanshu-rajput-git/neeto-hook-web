@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Button } from "@bigbinary/neetoui";
+import { Button, Toastr } from "@bigbinary/neetoui";
 import { fetchWebhooksForInbox } from "../utils/api";
-import { toast } from "react-toastify";
 
 const DownloadWebhooksButton = ({ inboxId }) => {
   const [isDownloading, setIsDownloading] = useState(false);
@@ -20,9 +19,9 @@ const DownloadWebhooksButton = ({ inboxId }) => {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      toast.success("Webhooks downloaded successfully!");
+      Toastr.success("Webhooks downloaded successfully!");
     } catch (error) {
-      toast.error("Failed to download webhooks.");
+      Toastr.error("Failed to download webhooks.");
     } finally {
       setIsDownloading(false);
     }
