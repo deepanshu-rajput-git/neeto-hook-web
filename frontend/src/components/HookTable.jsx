@@ -5,10 +5,10 @@ import { Table, Typography, Button } from "@bigbinary/neetoui";
 const HookTable = ({ hooks }) => {
   const getStatusClass = (status) => {
     if (status === "success")
-      return "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300";
+      return "bg-green-100 text-green-700";
     if (status === "failed")
-      return "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300";
-    return "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300";
+      return "bg-red-100 text-red-700";
+    return "bg-gray-100 text-gray-700";
   };
 
   const columnData = [
@@ -66,12 +66,12 @@ const HookTable = ({ hooks }) => {
   const rowData = Array.isArray(hooks) && hooks.length > 0 ? hooks : [];
 
   return (
-    <div className='bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700'>
+    <div className='bg-white rounded-lg shadow-sm border border-gray-200'>
       {rowData.length === 0 ? (
         <div className='py-8 px-6 text-center'>
           <Typography
             style='body2'
-            className='text-gray-500 dark:text-gray-400'
+            className='text-gray-500'
           >
             No webhooks received yet.
           </Typography>

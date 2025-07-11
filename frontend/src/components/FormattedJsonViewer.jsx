@@ -16,7 +16,7 @@ const FormattedJsonViewer = memo(({ data, initiallyExpandedLevel = 2 }) => {
   }, []);
 
   return (
-    <div className='overflow-auto max-h-[600px] bg-gray-100 dark:bg-gray-800 rounded p-4 text-sm font-mono'>
+    <div className='overflow-auto max-h-[600px] bg-gray-100 rounded p-4 text-sm font-mono'>
       <JsonView
         src={data}
         theme='okaidia'

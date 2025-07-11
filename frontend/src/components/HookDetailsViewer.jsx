@@ -3,14 +3,6 @@ import { Typography, Button, Toastr } from "@bigbinary/neetoui";
 import FormattedJsonViewer from "./FormattedJsonViewer";
 
 const HookDetailsViewer = memo(({ hook }) => {
-  if (!hook) {
-    return (
-      <div className='text-center p-8 text-gray-600 dark:text-gray-300'>
-        <Typography style='body2'>Loading...</Typography>
-      </div>
-    );
-  }
-
   const safeParse = useCallback((data) => {
     try {
       return typeof data === "string" ? JSON.parse(data) : data;
@@ -28,11 +20,11 @@ const HookDetailsViewer = memo(({ hook }) => {
         // Handle Ruby hash-like strings: "{\"key\"=>\"value\"}"
         const jsonString = headers.replace(/=>/g, ":");
         return JSON.parse(jsonString);
-      } catch (e) {
+      } catch {
         // Fallback for regular JSON strings or other formats
         try {
           return JSON.parse(headers);
-        } catch (e2) {
+        } catch {
           return { error: "Could not parse headers", raw: headers };
         }
       }
@@ -45,12 +37,6 @@ const HookDetailsViewer = memo(({ hook }) => {
     Toastr.success(`${type} copied to clipboard!`);
   }, []);
 
-  const parsedHeaders = parseHeaders(hook.headers);
-  const parsedBody = safeParse(hook.body);
-  const parsedOriginalBody = hook.original_body
-    ? safeParse(hook.original_body)
-    : null;
-
   const handleDownload = useCallback(() => {
     const data = JSON.stringify(hook, null, 2);
     const blob = new Blob([data], { type: "application/json" });
@@ -61,8 +47,22 @@ const HookDetailsViewer = memo(({ hook }) => {
     link.click();
   }, [hook]);
 
+  if (!hook) {
+    return (
+      <div className='text-center p-8 text-gray-600'>
+        <Typography style='body2'>Loading...</Typography>
+      </div>
+    );
+  }
+
+  const parsedHeaders = parseHeaders(hook.headers);
+  const parsedBody = safeParse(hook.body);
+  const parsedOriginalBody = hook.original_body
+    ? safeParse(hook.original_body)
+    : null;
+
   return (
-    <div className='bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 max-w-5xl mx-auto overflow-hidden'>
+    <div className='bg-white rounded-lg shadow-sm border border-gray-200 p-6 max-w-5xl mx-auto overflow-hidden'>
       <div className='flex justify-between items-center bg-gray-800 -mx-6 -mt-6 mb-6 p-4 rounded-t-lg'>
         <Typography
           style='h2'
@@ -78,36 +78,28 @@ const HookDetailsViewer = memo(({ hook }) => {
         />
       </div>
 
-      <div className='mb-6 border-b border-gray-200 dark:border-gray-700 pb-4'>
+      <div className='mb-6 border-b border-gray-200 pb-4'>
         <Typography
           style='h3'
-          className='text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2'
+          className='text-lg font-semibold text-gray-900 mb-2'
         >
           Request Info
         </Typography>
         <dl className='grid grid-cols-2 gap-x-4 gap-y-2 text-sm'>
-          <dt className='text-gray-600 dark:text-gray-300'>ID:</dt>
-          <dd className='text-gray-900 dark:text-gray-100 font-mono'>
-            {hook.id}
-          </dd>
-          <dt className='text-gray-600 dark:text-gray-300'>Method:</dt>
-          <dd className='text-gray-900 dark:text-gray-100'>
-            {hook.request_method}
-          </dd>
-          <dt className='text-gray-600 dark:text-gray-300'>Status:</dt>
-          <dd className='text-gray-900 dark:text-gray-100'>{hook.status}</dd>
-          <dt className='text-gray-600 dark:text-gray-300'>IP Address:</dt>
-          <dd className='text-gray-900 dark:text-gray-100 font-mono'>
-            {hook.ip_address}
-          </dd>
-          <dt className='text-gray-600 dark:text-gray-300'>Received At:</dt>
-          <dd className='text-gray-900 dark:text-gray-100'>
+          <dt className='text-gray-600'>ID:</dt>
+          <dd className='text-gray-900 font-mono'>{hook.id}</dd>
+          <dt className='text-gray-600'>Method:</dt>
+          <dd className='text-gray-900'>{hook.request_method}</dd>
+          <dt className='text-gray-600'>Status:</dt>
+          <dd className='text-gray-900'>{hook.status}</dd>
+          <dt className='text-gray-600'>IP Address:</dt>
+          <dd className='text-gray-900 font-mono'>{hook.ip_address}</dd>
+          <dt className='text-gray-600'>Received At:</dt>
+          <dd className='text-gray-900'>
             {new Date(hook.created_at).toLocaleString()}
           </dd>
-          <dt className='text-gray-600 dark:text-gray-300'>Latency:</dt>
-          <dd className='text-gray-900 dark:text-gray-100'>
-            {hook.latency} ms
-          </dd>
+          <dt className='text-gray-600'>Latency:</dt>
+          <dd className='text-gray-900'>{hook.latency} ms</dd>
         </dl>
       </div>
 
@@ -115,7 +107,7 @@ const HookDetailsViewer = memo(({ hook }) => {
         <div className='flex justify-between items-center mb-2'>
           <Typography
             style='h3'
-            className='text-lg font-semibold text-gray-900 dark:text-gray-100'
+            className='text-lg font-semibold text-gray-900'
           >
             Headers
           </Typography>
@@ -126,10 +118,10 @@ const HookDetailsViewer = memo(({ hook }) => {
             onClick={() =>
               copyToClipboard(JSON.stringify(parsedHeaders, null, 2), "Headers")
             }
-            className='text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300'
+            className='text-green-600 hover:text-green-700'
           />
         </div>
-        <pre className='overflow-auto max-h-[200px] bg-gray-100 dark:bg-gray-800 rounded p-4 text-sm font-mono whitespace-pre-wrap break-words text-gray-900 dark:text-gray-100'>
+        <pre className='overflow-auto max-h-[200px] bg-gray-100 rounded p-4 text-sm font-mono whitespace-pre-wrap break-words text-gray-900'>
           {JSON.stringify(parsedHeaders, null, 2)}
         </pre>
       </div>
@@ -139,7 +131,7 @@ const HookDetailsViewer = memo(({ hook }) => {
           <div className='flex justify-between items-center mb-2'>
             <Typography
               style='h3'
-              className='text-lg font-semibold text-gray-900 dark:text-gray-100'
+              className='text-lg font-semibold text-gray-900'
             >
               Original Body
             </Typography>
@@ -153,7 +145,7 @@ const HookDetailsViewer = memo(({ hook }) => {
                   "Original Body"
                 )
               }
-              className='text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300'
+              className='text-green-600 hover:text-green-700'
             />
           </div>
           <FormattedJsonViewer data={parsedOriginalBody} />
@@ -164,7 +156,7 @@ const HookDetailsViewer = memo(({ hook }) => {
         <div className='flex justify-between items-center mb-2'>
           <Typography
             style='h3'
-            className='text-lg font-semibold text-gray-900 dark:text-gray-100'
+            className='text-lg font-semibold text-gray-900'
           >
             {parsedOriginalBody ? "Transformed Body" : "Body"}
           </Typography>
@@ -175,7 +167,7 @@ const HookDetailsViewer = memo(({ hook }) => {
             onClick={() =>
               copyToClipboard(JSON.stringify(parsedBody, null, 2), "Body")
             }
-            className='text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300'
+            className='text-green-600 hover:text-green-700'
           />
         </div>
         <FormattedJsonViewer data={parsedBody} />

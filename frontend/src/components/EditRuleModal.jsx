@@ -76,9 +76,9 @@ const EditRuleModal = ({ rule, onSave, onCancel, isOpen }) => {
       className='fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50'
       onClick={handleBackdropClick}
     >
-      <div className='bg-white dark:bg-gray-900 rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto'>
+      <div className='bg-white rounded-lg shadow-xl max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto'>
         {/* Modal Header - following neeto-cal-web pattern */}
-        <div className='p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center'>
+        <div className='p-6 border-b border-gray-200 flex justify-between items-center'>
           <Typography style='h2' weight='bold'>
             Edit Rule
           </Typography>
@@ -113,11 +113,11 @@ const EditRuleModal = ({ rule, onSave, onCancel, isOpen }) => {
                 <div className='space-y-3'>
                   <Typography
                     style='body2'
-                    className='block text-sm font-medium text-gray-600 dark:text-gray-300'
+                    className='block text-sm font-medium text-gray-600'
                   >
                     Transformation Logic (JavaScript)
                   </Typography>
-                  <div className='rounded-md overflow-hidden border border-gray-200 dark:border-gray-600 relative'>
+                  <div className='rounded-md overflow-hidden border border-gray-200 relative'>
                     <button
                       onClick={() => handleCopyCode(props.values.body)}
                       className='absolute top-2 right-2 z-10 bg-white text-gray-700 p-2 rounded hover:bg-green-600 hover:text-white transition-colors border border-gray-200'
@@ -164,7 +164,7 @@ const EditRuleModal = ({ rule, onSave, onCancel, isOpen }) => {
         </div>
 
         {/* Modal Footer - following neeto-cal-web pattern */}
-        <div className='p-6 border-t border-gray-200 dark:border-gray-700'>
+        <div className='p-6 border-t border-gray-200'>
           <div className='flex justify-end space-x-2'>
             <Button style='tertiary' onClick={onCancel}>
               Cancel

@@ -266,95 +266,13 @@ function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className='bg-gray-800 text-white py-12'>
-        <div className='max-w-7xl mx-auto px-6'>
-          <div className='grid grid-cols-1 md:grid-cols-4 gap-8'>
-            <div>
-              <div className='flex items-center space-x-3 mb-4 '>
-                <Logo />
-                <Typography style='h3' className='text-white text-xl font-bold'>
-                  NeetoWebhooks
-                </Typography>
-              </div>
-              <Typography style='body2' className='text-gray-400'>
-                The developer-friendly platform for testing, inspecting, and
-                transforming webhooks.
-              </Typography>
-            </div>
-            <div>
-              <Typography style='h4' className='text-white font-semibold mb-4'>
-                Product
-              </Typography>
-              <ul className='space-y-2 text-gray-400'>
-                <li>
-                  <a href='#' className='hover:text-white transition-colors'>
-                    Features
-                  </a>
-                </li>
-                <li>
-                  <a href='#' className='hover:text-white transition-colors'>
-                    Pricing
-                  </a>
-                </li>
-                <li>
-                  <a href='#' className='hover:text-white transition-colors'>
-                    Documentation
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <Typography style='h4' className='text-white font-semibold mb-4'>
-                Company
-              </Typography>
-              <ul className='space-y-2 text-gray-400'>
-                <li>
-                  <a href='#' className='hover:text-white transition-colors'>
-                    About
-                  </a>
-                </li>
-                <li>
-                  <a href='#' className='hover:text-white transition-colors'>
-                    Blog
-                  </a>
-                </li>
-                <li>
-                  <a href='#' className='hover:text-white transition-colors'>
-                    Contact
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <Typography style='h4' className='text-white font-semibold mb-4'>
-                Support
-              </Typography>
-              <ul className='space-y-2 text-gray-400'>
-                <li>
-                  <a href='#' className='hover:text-white transition-colors'>
-                    Help Center
-                  </a>
-                </li>
-                <li>
-                  <a href='#' className='hover:text-white transition-colors'>
-                    Status
-                  </a>
-                </li>
-                <li>
-                  <a href='#' className='hover:text-white transition-colors'>
-                    API
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className='border-t border-gray-800 mt-8 pt-8 text-center'>
+      <footer className='bg-gray-800 text-white py-6'>
+      <div className='border-t border-gray-800 text-center'>
             <Typography style='body2' className='text-gray-400'>
               &copy; 2025 NeetoWebhooks. A BigBinary Product. All rights
               reserved.
             </Typography>
           </div>
-        </div>
       </footer>
     </div>
   );

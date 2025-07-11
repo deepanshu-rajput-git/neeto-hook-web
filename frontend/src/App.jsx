@@ -26,10 +26,6 @@ import Sidebar from "./components/Sidebar";
 import cable from "./services/cable";
 
 function AppContent() {
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    const saved = localStorage.getItem("darkMode");
-    return saved ? JSON.parse(saved) : false; // Default to light theme
-  });
   const [activeInbox, setActiveInbox] = useState(null);
   const [loading, setLoading] = useState(true);
   const [hooks, setHooks] = useState([]);
@@ -42,15 +38,6 @@ function AppContent() {
 
   const showSuccess = useCallback((message) => Toastr.success(message), []);
   const showError = useCallback((message) => Toastr.error(message), []);
-
-  useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-    localStorage.setItem("darkMode", JSON.stringify(isDarkMode));
-  }, [isDarkMode]);
 
   useEffect(() => {
     let ignore = false;
@@ -183,8 +170,8 @@ function AppContent() {
   }, [activeInbox?.uuid, debouncedFetchStats, showSuccess, showError]);
 
   const MainLayout = ({ children }) => (
-    <div className='flex flex-col h-screen bg-white dark:bg-gray-900'>
-      <HeaderBar isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
+    <div className='flex flex-col h-screen bg-white'>
+      <HeaderBar />
       <div className='flex flex-1 overflow-hidden'>
         <Sidebar />
         <main className='flex-1 p-6 overflow-y-auto'>{children}</main>
@@ -235,7 +222,7 @@ function App() {
     <>
       <AppContent />
       <ToastContainer
-        position="bottom-right"
+        position='bottom-right'
         autoClose={5000}
         hideProgressBar={false}
         newestOnTop={false}
@@ -244,7 +231,7 @@ function App() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light"
+        theme='light'
       />
     </>
   );

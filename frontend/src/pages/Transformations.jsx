@@ -173,7 +173,7 @@ const Transformations = () => {
         <Typography style='h1' className='mb-6'>
           Payload Transformations
         </Typography>
-        <Typography style='body2' className='text-gray-600 dark:text-gray-300'>
+        <Typography style='body2' className='text-gray-600'>
           Loading transformation rules...
         </Typography>
       </div>
@@ -186,7 +186,7 @@ const Transformations = () => {
         <Typography style='h1'>Payload Transformations</Typography>
       </div>
 
-      <div className='bg-white dark:bg-gray-900 p-8 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700'>
+      <div className='bg-white p-8 rounded-lg shadow-sm border border-gray-200'>
         <div className='mb-6'>
           <Typography style='h2'>Create New Rule</Typography>
         </div>
@@ -212,18 +212,18 @@ const Transformations = () => {
                 <div className='space-y-3'>
                   <Typography
                     style='body2'
-                    className='block text-sm font-medium text-gray-600 dark:text-gray-300'
+                    className='block text-sm font-medium text-gray-600'
                   >
                     Transformation Logic (JavaScript)
                   </Typography>
                   <Typography
                     style='body3'
-                    className='text-xs text-gray-600 dark:text-gray-300'
+                    className='text-xs text-gray-600'
                   >
                     Modify the <code>payload</code> object. It will be
                     automatically stringified.
                   </Typography>
-                  <div className='rounded-md overflow-hidden border border-gray-200 dark:border-gray-600 relative'>
+                  <div className='rounded-md overflow-hidden border border-gray-200 relative'>
                     <button
                       onClick={() => handleCopyCode(props.values.body)}
                       className='absolute top-2 right-2 z-10 bg-white text-gray-700 p-2 rounded hover:bg-green-600 hover:text-white transition-colors border border-gray-200'
@@ -285,7 +285,7 @@ const Transformations = () => {
           {rules.length === 0 ? (
             <Typography
               style='body2'
-              className='text-gray-600 dark:text-gray-300'
+              className='text-gray-600'
             >
               No transformation rules found.
             </Typography>
@@ -293,7 +293,7 @@ const Transformations = () => {
             rules.map((rule) => (
               <div
                 key={rule.id}
-                className='bg-white dark:bg-gray-900 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700'
+                className='bg-white p-6 rounded-lg shadow-sm border border-gray-200'
               >
                 <div className='flex flex-col items-start gap-6 md:flex-row md:items-center'>
                   <div className='space-y-1 min-w-0 flex-grow'>
@@ -306,7 +306,7 @@ const Transformations = () => {
                     </Typography>
                     <Typography
                       style='body2'
-                      className='text-gray-600 dark:text-gray-300'
+                      className='text-gray-600'
                     >
                       Type: {rule.rule_type}
                     </Typography>

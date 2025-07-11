@@ -5,11 +5,11 @@ import DownloadWebhooksButton from "../components/DownloadWebhooksButton";
 import { ClipboardDocumentIcon } from "@heroicons/react/24/outline";
 
 const StatCard = ({ title, value }) => (
-  <div className='bg-white dark:bg-gray-900 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700'>
-    <Typography style='body2' className='text-gray-600 dark:text-gray-300'>
+  <div className='bg-white p-4 rounded-lg shadow-sm border border-gray-200'>
+    <Typography style='body2' className='text-gray-600'>
       {title}
     </Typography>
-    <Typography style='h1' className='mt-1 text-gray-900 dark:text-gray-100'>
+    <Typography style='h1' className='mt-1 text-gray-900'>
       {value}
     </Typography>
   </div>
@@ -48,7 +48,7 @@ const Dashboard = ({ activeInbox, loading, hooks, stats }) => {
         <Typography style='h1' className='mb-6'>
           Dashboard
         </Typography>
-        <Typography style='body2' className='text-gray-600 dark:text-gray-300'>
+        <Typography style='body2' className='text-gray-600'>
           Initializing your webhook inbox...
         </Typography>
       </div>
@@ -70,11 +70,8 @@ const Dashboard = ({ activeInbox, loading, hooks, stats }) => {
         <StatCard title='Failed' value={stats?.failed_hooks ?? 0} />
       </div>
 
-      <div className='bg-gray-100 dark:bg-gray-800 p-4 rounded-lg mb-6'>
-        <Typography
-          style='body2'
-          className='text-gray-700 dark:text-gray-300 mb-1'
-        >
+      <div className='bg-gray-100 p-4 rounded-lg mb-6'>
+        <Typography style='body2' className='text-gray-700 mb-1'>
           Webhook URL
         </Typography>
         <div className='flex items-center'>

@@ -22,11 +22,11 @@ const Sidebar = () => {
 
     return isActive
       ? "bg-blue-100 text-black shadow-sm font-bold border border-blue-200"
-      : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white font-semibold";
+      : "text-gray-700 hover:bg-gray-100 hover:text-gray-900 font-semibold";
   };
 
   return (
-    <aside className='w-64 bg-white dark:bg-gray-800 p-4 border-r border-gray-200 dark:border-gray-700 shadow-sm'>
+    <aside className='w-64 bg-white p-4 border-r border-gray-200 shadow-sm'>
       <nav className='space-y-2'>
         {navItems.map((item) => {
           const Icon = item.icon;
