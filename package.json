@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "concurrently \"bundle exec rails s\" \"npm run dev --prefix frontend\"",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "cd frontend && npm install && npm run build && cd .. && cp -r ./frontend/dist/* ./public/"
+    "build": "cd frontend && rm -rf node_modules package-lock.json && npm install && npm run build && cd .. && cp -r ./frontend/dist/* ./public/"
   },
   "keywords": [],
   "author": "",
