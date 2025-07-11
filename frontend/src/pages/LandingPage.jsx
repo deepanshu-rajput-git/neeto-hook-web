@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import { Typography, Button } from "@bigbinary/neetoui";
 import {
   ArrowRightIcon,
@@ -8,118 +7,124 @@ import {
   CommandLineIcon,
   CubeTransparentIcon,
   ShieldCheckIcon,
+  EyeIcon,
+  ClockIcon,
+  ChartBarIcon,
+  BoltIcon,
+  GlobeAltIcon,
+  CpuChipIcon,
+  ServerIcon,
 } from "@heroicons/react/24/outline";
 import Logo from "../components/Logo";
 
-const Feature = ({ icon, title, children, delay }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5, delay }}
-    viewport={{ once: true }}
-    className='bg-white dark:bg-gray-900 p-6 rounded-lg shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 border border-gray-200 dark:border-gray-700'
-  >
-    <div className='flex items-center justify-center h-12 w-12 rounded-md bg-green-500 text-white mb-4'>
+const Feature = ({ icon, title, description }) => (
+  <div className='group relative bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-green-200'>
+    <div className='flex items-center justify-center h-14 w-14 rounded-xl bg-gradient-to-br from-green-500 to-green-600 text-white mb-6 group-hover:scale-110 transition-transform duration-300'>
       {icon}
     </div>
-    <Typography as='h3' className='text-xl font-bold text-gray-900 dark:text-gray-100 mb-2'>
+    <Typography style='h3' className='text-xl font-semibold text-gray-900 mb-3'>
       {title}
     </Typography>
-    <Typography as='p' className='text-gray-600 dark:text-gray-300'>{children}</Typography>
-  </motion.div>
+    <Typography style='body2' className='text-gray-600 leading-relaxed'>
+      {description}
+    </Typography>
+  </div>
 );
 
-const UseCase = ({ title, children, delay }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5, delay }}
-    viewport={{ once: true }}
-    className='bg-white dark:bg-gray-900 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700'
-  >
-    <Typography as='h3' className='text-xl font-bold text-gray-900 dark:text-gray-100 mb-2'>
+const UseCase = ({ title, description, icon }) => (
+  <div className='bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg transition-all duration-300'>
+    <div className='flex items-center justify-center h-12 w-12 rounded-lg bg-blue-50 text-blue-600 mb-4'>
+      {icon}
+    </div>
+    <Typography style='h3' className='text-lg font-semibold text-gray-900 mb-3'>
       {title}
     </Typography>
-    <Typography as='p' className='text-gray-600 dark:text-gray-300'>{children}</Typography>
-  </motion.div>
+    <Typography style='body2' className='text-gray-600'>
+      {description}
+    </Typography>
+  </div>
 );
 
-const Testimonial = ({ quote, author, delay }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5, delay }}
-    viewport={{ once: true }}
-    className='bg-white dark:bg-gray-900 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700'
-  >
-    <Typography as='p' className='text-gray-600 dark:text-gray-300 italic'>"{quote}"</Typography>
-    <Typography as='p' className='text-gray-900 dark:text-gray-100 font-bold mt-4'>
-      - {author}
+const Testimonial = ({ quote, author, role, company }) => (
+  <div className='bg-white p-8 rounded-2xl shadow-sm border border-gray-100'>
+    <div className='flex items-start mb-6'>
+      <div className='flex-shrink-0'>
+        <div className='w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center'>
+          <span className='text-white font-semibold text-lg'>
+            {author.charAt(0)}
+          </span>
+        </div>
+      </div>
+      <div className='ml-4'>
+        <Typography style='body1' className='font-semibold text-gray-900'>
+          {author}
+        </Typography>
+        <Typography style='body2' className='text-sm text-gray-600'>
+          {role} at {company}
+        </Typography>
+      </div>
+    </div>
+    <Typography style='body1' className='text-gray-700 italic leading-relaxed'>
+      "{quote}"
     </Typography>
-  </motion.div>
+  </div>
+);
+
+const StatCard = ({ number, label }) => (
+  <div className='text-center'>
+    <Typography style='h1' className='text-5xl font-bold text-green-600 mb-2'>
+      {number}
+    </Typography>
+    <Typography style='h3' className='text-gray-600 font-medium text-lg'>
+      {label}
+    </Typography>
+  </div>
 );
 
 function LandingPage() {
   return (
-    <div className='bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans'>
+    <div className='bg-white text-gray-900 font-sans'>
       {/* Header */}
-      <motion.header
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5 }}
-        className='border-b border-gray-200 dark:border-gray-700 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md sticky top-0 z-50'
-      >
-        <div className='container mx-auto px-6 py-4'>
+      <header className='border-b border-gray-100 bg-white/95 backdrop-blur-md sticky top-0 z-50'>
+        <div className='max-w-7xl mx-auto px-6 py-4'>
           <nav className='flex items-center justify-between'>
             <Link to='/' className='flex items-center space-x-3'>
               <Logo />
-              <Typography as='h1' className='text-xl font-bold text-gray-900 dark:text-gray-100'>
+              <Typography
+                style='h2'
+                className='text-xl font-bold text-gray-900'
+              >
                 NeetoWebhooks
               </Typography>
             </Link>
-            <div className='flex items-center space-x-6'>
-              <Button
-                label='Go to Dashboard'
-                variant='primary'
-                size='large'
-                to='/dashboard'
-                className='flex items-center group'
-                icon={ArrowRightIcon}
-                iconPosition='right'
-              />
-            </div>
+
           </nav>
         </div>
-      </motion.header>
+      </header>
 
       {/* Hero Section */}
-      <main className='container mx-auto px-6 pt-24 md:pt-32 text-center'>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-        >
-          <Typography as='h1' className='text-4xl md:text-6xl font-extrabold text-gray-900 dark:text-gray-100 leading-tight tracking-tight'>
-          Reliable Webhook Infrastructure
+      <main className='max-w-7xl mx-auto px-6 pt-20 pb-16 text-center'>
+        <div className='mb-8 text-center'>
+          <div className='text-[3rem] md:text-[5rem] font-extrabold leading-[1.1] tracking-tight text-gray-900'>
+            One hook to{" "}
+            <span className='bg-gradient-to-r from-green-400 via-green-500 to-green-600 bg-clip-text text-transparent'>
+              inspect them all
+            </span>
+          </div>
+        </div>
+
+        <div className='mb-10 flex justify-center'>
+          <Typography
+            style='h3'
+            className='text-center w-full text-xl md:text-2xl text-gray-600 max-w-4xl leading-relaxed'
+          >
+            The developer-friendly platform for testing, inspecting, and
+            transforming webhooks. Get instant visibility into your webhook
+            traffic with real-time monitoring and powerful transformation
+            capabilities.
           </Typography>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-          className='mt-6'
-        >
-          <Typography as='p' className='text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto'>
-            Inspect, transform, and deliver your webhooks with a
-            developer-friendly platform.
-          </Typography>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.4 }}
-          className='mt-10'
-        >
+        </div>
+        <div className='flex flex-col sm:flex-row gap-4 justify-center items-center'>
           <Button
             label='Get Your Webhook URL'
             variant='primary'
@@ -127,125 +132,228 @@ function LandingPage() {
             to='/dashboard'
             className='px-8 py-4 text-lg hover:scale-105 transition-transform'
           />
-        </motion.div>
+          <Button
+            label='View Documentation'
+            variant='secondary'
+            size='large'
+            className='px-8 py-4 text-lg'
+          />
+        </div>
       </main>
 
-      {/* Showcase Section */}
-      <section className='container mx-auto px-6 py-16 md:py-24'>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.4 }}
-          viewport={{ once: true }}
-        ></motion.div>
-      </section>
-
       {/* Features Section */}
-      <section id='features' className='py-20 bg-white'>
-        <div className='container mx-auto px-6'>
+      <section className='py-20 bg-gray-50'>
+        <div className='max-w-7xl mx-auto px-6'>
           <div className='text-center mb-16'>
-            <Typography as='h2' className='text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100'>
-              Everything you need to handle webhooks
+            <Typography
+              style='h1'
+              className='text-5xl md:text-6xl font-bold text-gray-900 mb-6'
+            >
+              Everything you need for webhook development
             </Typography>
-            <Typography as='p' className='text-gray-600 dark:text-gray-300 mt-4 max-w-2xl mx-auto text-lg'>
-              From local development to production-grade delivery, NeetoWebhooks
-              has you covered.
-            </Typography>
+            <div className='flex justify-center'>
+              <Typography
+                style='h3'
+                className='text-center w-full text-xl text-gray-600 max-w-3xl'
+              >
+                From local development to production monitoring, we've got you
+                covered with powerful tools and real-time insights.
+              </Typography>
+            </div>
           </div>
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8'>
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
             <Feature
-              delay={0}
-              icon={<CodeBracketIcon className='h-7 w-7' />}
-              title='Inspect & Debug'
-            >
-              Get a unique URL to collect and inspect incoming HTTP requests.
-            </Feature>
+              icon={<EyeIcon className='h-7 w-7' />}
+              title='Live Inspection'
+              description='Real-time webhook inspection with detailed request and response analysis. See headers, body, IP, and timing information instantly.'
+            />
             <Feature
-              delay={0.1}
-              icon={<CommandLineIcon className='h-7 w-7' />}
-              title='Forward Locally'
-            >
-              Use our CLI to securely tunnel webhooks to your local server.
-            </Feature>
-            <Feature
-              delay={0.2}
               icon={<CubeTransparentIcon className='h-7 w-7' />}
-              title='Transform & Replay'
-            >
-              Forward, replay, and transform webhooks with custom logic.
-            </Feature>
+              title='Payload Transformation'
+              description='Transform webhook payloads using JavaScript with our powerful transformation engine. Modify data on-the-fly without touching your code.'
+            />
             <Feature
-              delay={0.3}
               icon={<ShieldCheckIcon className='h-7 w-7' />}
               title='Reliable Delivery'
+              description='Ensure webhook delivery with retry mechanisms and delivery guarantees. Never miss a webhook again.'
+            />
+            <Feature
+              icon={<CommandLineIcon className='h-7 w-7' />}
+              title='Local Tunneling'
+              description='Test webhooks locally with secure tunneling and instant setup. Expose your localhost to the world safely.'
+            />
+            <Feature
+              icon={<ClockIcon className='h-7 w-7' />}
+              title='Webhook History'
+              description='Complete history of all webhooks with search and filtering capabilities. Find any webhook in seconds.'
+            />
+            <Feature
+              icon={<ChartBarIcon className='h-7 w-7' />}
+              title='Analytics & Monitoring'
+              description='Track webhook performance with detailed analytics, success rates, and real-time monitoring dashboards.'
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
+      <section className='py-20 bg-white'>
+        <div className='max-w-7xl mx-auto px-6'>
+          <div className='text-center mb-16'>
+            <Typography
+              style='h1'
+              className='text-5xl md:text-6xl font-bold text-gray-900 mb-6'
             >
-              Automatic retries and exponential backoff ensure delivery.
-            </Feature>
-          </div>
-        </div>
-      </section>
-
-      {/* Use Cases Section */}
-      <section id='use-cases' className='py-20 bg-gray-100'>
-        <div className='container mx-auto px-6'>
-          <div className='text-center mb-16'>
-            <Typography as='h2' className='text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100'>
-              How will you use NeetoWebhooks?
+              How it works
             </Typography>
-            <Typography as='p' className='text-gray-600 dark:text-gray-300 mt-4 max-w-2xl mx-auto text-lg'>
-              NeetoWebhooks is a versatile tool that can be used in a variety of
-              scenarios.
-            </Typography>
+            <div className='flex justify-center'>
+              <Typography
+                style='h3'
+                className='text-center w-full text-xl text-gray-600 max-w-3xl'
+              >
+                Get started in seconds with our simple three-step process.
+              </Typography>
+            </div>
           </div>
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
-            <UseCase delay={0} title='Webhook Development'>
-              Develop and test webhooks locally without exposing your
-              development server to the internet.
-            </UseCase>
-            <UseCase delay={0.1} title='Third-party Integrations'>
-              Integrate with third-party services that require a publicly
-              accessible webhook URL.
-            </UseCase>
-            <UseCase delay={0.2} title='API Mocking'>
-              Create mock API endpoints to simulate webhook payloads for testing
-              and development.
-            </UseCase>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section id='testimonials' className='py-20 bg-white'>
-        <div className='container mx-auto px-6'>
-          <div className='text-center mb-16'>
-            <Typography as='h2' className='text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100'>
-              What our users are saying
-            </Typography>
-          </div>
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
-            <Testimonial
-              delay={0}
-              quote='NeetoWebhooks has been a game-changer for our development workflow. We can now test our webhooks locally without any hassle.'
-              author='John Doe, Lead Developer at BigBinary'
-            />
-            <Testimonial
-              delay={0.1}
-              quote='The ability to inspect and replay webhooks has saved us countless hours of debugging time.'
-              author='Jane Smith, Senior Engineer at BigBinary'
-            />
-            <Testimonial
-              delay={0.2}
-              quote="NeetoWebhooks is a must-have tool for any developer working with webhooks. It's simple, reliable, and easy to use."
-              author='Sam Wilson, Software Engineer at BigBinary'
-            />
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
+            <div className='text-center'>
+              <div className='flex items-center justify-center h-16 w-16 rounded-full bg-green-100 text-green-600 text-2xl font-bold mx-auto mb-6'>
+                1
+              </div>
+              <Typography
+                style='h3'
+                className='text-xl font-semibold text-gray-900 mb-4'
+              >
+                Get Your URL
+              </Typography>
+              <Typography style='body2' className='text-gray-600'>
+                Create a webhook inbox and get a unique URL instantly. No setup
+                required.
+              </Typography>
+            </div>
+            <div className='text-center'>
+              <div className='flex items-center justify-center h-16 w-16 rounded-full bg-green-100 text-green-600 text-2xl font-bold mx-auto mb-6'>
+                2
+              </div>
+              <Typography
+                style='h3'
+                className='text-xl font-semibold text-gray-900 mb-4'
+              >
+                Send Webhooks
+              </Typography>
+              <Typography style='body2' className='text-gray-600'>
+                Point your webhooks to the URL and watch them arrive in
+                real-time on your dashboard.
+              </Typography>
+            </div>
+            <div className='text-center'>
+              <div className='flex items-center justify-center h-16 w-16 rounded-full bg-green-100 text-green-600 text-2xl font-bold mx-auto mb-6'>
+                3
+              </div>
+              <Typography
+                style='h3'
+                className='text-xl font-semibold text-gray-900 mb-4'
+              >
+                Inspect & Transform
+              </Typography>
+              <Typography style='body2' className='text-gray-600'>
+                View detailed information, transform payloads, and forward to
+                your applications.
+              </Typography>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className='bg-gray-100 border-t border-gray-200'>
-        <div className='container mx-auto px-6 py-8 text-center text-gray-500'>
-          <Typography as='p'>&copy; 2025 NeetoWebhooks. A BigBinary Product.</Typography>
+      <footer className='bg-gray-800 text-white py-12'>
+        <div className='max-w-7xl mx-auto px-6'>
+          <div className='grid grid-cols-1 md:grid-cols-4 gap-8'>
+            <div>
+              <div className='flex items-center space-x-3 mb-4 '>
+                <Logo />
+                <Typography style='h3' className='text-white text-xl font-bold'>
+                  NeetoWebhooks
+                </Typography>
+              </div>
+              <Typography style='body2' className='text-gray-400'>
+                The developer-friendly platform for testing, inspecting, and
+                transforming webhooks.
+              </Typography>
+            </div>
+            <div>
+              <Typography style='h4' className='text-white font-semibold mb-4'>
+                Product
+              </Typography>
+              <ul className='space-y-2 text-gray-400'>
+                <li>
+                  <a href='#' className='hover:text-white transition-colors'>
+                    Features
+                  </a>
+                </li>
+                <li>
+                  <a href='#' className='hover:text-white transition-colors'>
+                    Pricing
+                  </a>
+                </li>
+                <li>
+                  <a href='#' className='hover:text-white transition-colors'>
+                    Documentation
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <Typography style='h4' className='text-white font-semibold mb-4'>
+                Company
+              </Typography>
+              <ul className='space-y-2 text-gray-400'>
+                <li>
+                  <a href='#' className='hover:text-white transition-colors'>
+                    About
+                  </a>
+                </li>
+                <li>
+                  <a href='#' className='hover:text-white transition-colors'>
+                    Blog
+                  </a>
+                </li>
+                <li>
+                  <a href='#' className='hover:text-white transition-colors'>
+                    Contact
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <Typography style='h4' className='text-white font-semibold mb-4'>
+                Support
+              </Typography>
+              <ul className='space-y-2 text-gray-400'>
+                <li>
+                  <a href='#' className='hover:text-white transition-colors'>
+                    Help Center
+                  </a>
+                </li>
+                <li>
+                  <a href='#' className='hover:text-white transition-colors'>
+                    Status
+                  </a>
+                </li>
+                <li>
+                  <a href='#' className='hover:text-white transition-colors'>
+                    API
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className='border-t border-gray-800 mt-8 pt-8 text-center'>
+            <Typography style='body2' className='text-gray-400'>
+              &copy; 2025 NeetoWebhooks. A BigBinary Product. All rights
+              reserved.
+            </Typography>
+          </div>
         </div>
       </footer>
     </div>

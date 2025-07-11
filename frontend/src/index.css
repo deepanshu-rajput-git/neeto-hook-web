@@ -53,4 +53,74 @@
   a {
     @apply text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 transition-colors duration-200;
   }
+
+    /* Toast styles - ensure proper text color with higher specificity */
+  .Toastify__toast,
+  .Toastify__toast *,
+  .Toastify__toast-body,
+  .Toastify__toast-body *,
+  .Toastify__toast-icon,
+  .Toastify__toast-icon *,
+  .Toastify__toast-message,
+  .Toastify__toast-message * {
+    color: white !important;
+  }
+
+  .Toastify__toast--success {
+    background-color: #059669 !important;
+  }
+
+  .Toastify__toast--error {
+    background-color: #ef4444 !important;
+  }
+
+  .Toastify__toast--info {
+    background-color: #3b82f6 !important;
+  }
+
+  .Toastify__toast--warning {
+    background-color: #f59e0b !important;
+  }
+
+  /* Override any Tailwind text color classes that might be applied */
+  .Toastify__toast .text-black,
+  .Toastify__toast .text-gray-900,
+  .Toastify__toast .text-neutral-900 {
+    color: white !important;
+  }
+}
+
+/* Toast styles outside of @layer for higher priority */
+.Toastify__toast,
+.Toastify__toast *,
+.Toastify__toast-body,
+.Toastify__toast-body *,
+.Toastify__toast-icon,
+.Toastify__toast-icon *,
+.Toastify__toast-message,
+.Toastify__toast-message * {
+  color: white !important;
+}
+
+.Toastify__toast--success {
+  background-color: #059669 !important;
+}
+
+.Toastify__toast--error {
+  background-color: #ef4444 !important;
+}
+
+.Toastify__toast--info {
+  background-color: #3b82f6 !important;
+}
+
+.Toastify__toast--warning {
+  background-color: #f59e0b !important;
+}
+
+/* Override any Tailwind text color classes that might be applied */
+.Toastify__toast .text-black,
+.Toastify__toast .text-gray-900,
+.Toastify__toast .text-neutral-900 {
+  color: white !important;
 }

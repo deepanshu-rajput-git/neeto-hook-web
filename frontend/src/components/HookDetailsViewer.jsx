@@ -6,7 +6,7 @@ const HookDetailsViewer = memo(({ hook }) => {
   if (!hook) {
     return (
       <div className='text-center p-8 text-gray-600 dark:text-gray-300'>
-        <Typography as='p'>Loading...</Typography>
+        <Typography style='body2'>Loading...</Typography>
       </div>
     );
   }
@@ -63,13 +63,16 @@ const HookDetailsViewer = memo(({ hook }) => {
 
   return (
     <div className='bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 max-w-5xl mx-auto overflow-hidden'>
-      <div className='flex justify-between items-center bg-gray-800 dark:bg-gray-800 -mx-6 -mt-6 mb-6 p-4 rounded-t-lg'>
-        <Typography as='h2' className='text-2xl font-bold text-white'>
+      <div className='flex justify-between items-center bg-gray-800 -mx-6 -mt-6 mb-6 p-4 rounded-t-lg'>
+        <Typography
+          style='h2'
+          className='text-2xl font-bold text-white !text-white'
+        >
           Webhook details
         </Typography>
         <Button
           label='Download'
-          variant='primary'
+          style='primary'
           size='small'
           onClick={handleDownload}
         />
@@ -77,7 +80,7 @@ const HookDetailsViewer = memo(({ hook }) => {
 
       <div className='mb-6 border-b border-gray-200 dark:border-gray-700 pb-4'>
         <Typography
-          as='h3'
+          style='h3'
           className='text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2'
         >
           Request Info
@@ -111,14 +114,14 @@ const HookDetailsViewer = memo(({ hook }) => {
       <div className='mb-6'>
         <div className='flex justify-between items-center mb-2'>
           <Typography
-            as='h3'
+            style='h3'
             className='text-lg font-semibold text-gray-900 dark:text-gray-100'
           >
             Headers
           </Typography>
           <Button
             label='Copy'
-            variant='text'
+            style='text'
             size='small'
             onClick={() =>
               copyToClipboard(JSON.stringify(parsedHeaders, null, 2), "Headers")
@@ -135,14 +138,14 @@ const HookDetailsViewer = memo(({ hook }) => {
         <div className='mb-6'>
           <div className='flex justify-between items-center mb-2'>
             <Typography
-              as='h3'
+              style='h3'
               className='text-lg font-semibold text-gray-900 dark:text-gray-100'
             >
               Original Body
             </Typography>
             <Button
               label='Copy'
-              variant='text'
+              style='text'
               size='small'
               onClick={() =>
                 copyToClipboard(
@@ -160,14 +163,14 @@ const HookDetailsViewer = memo(({ hook }) => {
       <div className='mb-6'>
         <div className='flex justify-between items-center mb-2'>
           <Typography
-            as='h3'
+            style='h3'
             className='text-lg font-semibold text-gray-900 dark:text-gray-100'
           >
             {parsedOriginalBody ? "Transformed Body" : "Body"}
           </Typography>
           <Button
             label='Copy'
-            variant='text'
+            style='text'
             size='small'
             onClick={() =>
               copyToClipboard(JSON.stringify(parsedBody, null, 2), "Body")

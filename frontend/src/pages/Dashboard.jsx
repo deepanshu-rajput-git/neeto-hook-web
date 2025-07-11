@@ -6,10 +6,10 @@ import { ClipboardDocumentIcon } from "@heroicons/react/24/outline";
 
 const StatCard = ({ title, value }) => (
   <div className='bg-white dark:bg-gray-900 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700'>
-    <Typography as='p' className='text-gray-600 dark:text-gray-300'>
+    <Typography style='body2' className='text-gray-600 dark:text-gray-300'>
       {title}
     </Typography>
-    <Typography as='h1' className='mt-1 text-gray-900 dark:text-gray-100'>
+    <Typography style='h1' className='mt-1 text-gray-900 dark:text-gray-100'>
       {value}
     </Typography>
   </div>
@@ -45,10 +45,10 @@ const Dashboard = ({ activeInbox, loading, hooks, stats }) => {
   if (loading) {
     return (
       <div>
-        <Typography as='h1' className='mb-6'>
+        <Typography style='h1' className='mb-6'>
           Dashboard
         </Typography>
-        <Typography as='p' className='text-gray-600 dark:text-gray-300'>
+        <Typography style='body2' className='text-gray-600 dark:text-gray-300'>
           Initializing your webhook inbox...
         </Typography>
       </div>
@@ -58,7 +58,9 @@ const Dashboard = ({ activeInbox, loading, hooks, stats }) => {
   return (
     <div>
       <div className='flex justify-between items-center mb-6'>
-        <Typography as='h1'>{activeInbox?.name || "Webhook Inbox"}</Typography>
+        <Typography style='h1'>
+          {activeInbox?.name || "Webhook Inbox"}
+        </Typography>
       </div>
 
       <div className='grid grid-cols-1 gap-5 sm:grid-cols-4 mb-6'>
@@ -69,7 +71,10 @@ const Dashboard = ({ activeInbox, loading, hooks, stats }) => {
       </div>
 
       <div className='bg-gray-100 dark:bg-gray-800 p-4 rounded-lg mb-6'>
-        <Typography as='p' className='text-gray-700 dark:text-gray-300 mb-1'>
+        <Typography
+          style='body2'
+          className='text-gray-700 dark:text-gray-300 mb-1'
+        >
           Webhook URL
         </Typography>
         <div className='flex items-center'>
@@ -80,7 +85,7 @@ const Dashboard = ({ activeInbox, loading, hooks, stats }) => {
           />
           <Button
             icon={ClipboardDocumentIcon}
-            variant='primary'
+            style='primary'
             size='medium'
             onClick={handleCopyUrl}
             className='rounded-l-none border-l-0'
@@ -89,7 +94,7 @@ const Dashboard = ({ activeInbox, loading, hooks, stats }) => {
       </div>
 
       <div className='flex justify-between items-center mb-4'>
-        <Typography as='h2'>Recent Webhooks</Typography>
+        <Typography style='h2'>Recent Webhooks</Typography>
         {Array.isArray(hooks) && hooks.length > 0 && (
           <DownloadWebhooksButton inboxId={activeInbox.uuid} />
         )}

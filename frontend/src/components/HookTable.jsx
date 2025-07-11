@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Table, Typography } from "@bigbinary/neetoui";
+import { Table, Typography, Button } from "@bigbinary/neetoui";
 
 const HookTable = ({ hooks }) => {
   const getStatusClass = (status) => {
@@ -52,12 +52,13 @@ const HookTable = ({ hooks }) => {
       key: "actions",
       width: "20%",
       render: (_, record) => (
-        <Link
+        <Button
+          label='View'
+          style='primary'
+          size='small'
           to={`/hooks/${record.id}`}
-          className='text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 hover:underline transition-colors duration-200'
-        >
-          View
-        </Link>
+          className='hover:scale-105 hover:shadow-md transition-all duration-200'
+        />
       ),
     },
   ];

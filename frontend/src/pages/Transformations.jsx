@@ -9,6 +9,39 @@ import axios from "axios";
 import EditRuleModal from "../components/EditRuleModal";
 import CustomFormikForm from "../components/CustomFormikForm";
 
+// Icon components
+const CopyIcon = () => (
+  <svg
+    width='16'
+    height='16'
+    viewBox='0 0 24 24'
+    fill='none'
+    stroke='currentColor'
+    strokeWidth='2'
+    strokeLinecap='round'
+    strokeLinejoin='round'
+  >
+    <rect x='9' y='9' width='13' height='13' rx='2' ry='2'></rect>
+    <path d='M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1'></path>
+  </svg>
+);
+
+const EditIcon = () => (
+  <svg
+    width='16'
+    height='16'
+    viewBox='0 0 24 24'
+    fill='none'
+    stroke='currentColor'
+    strokeWidth='2'
+    strokeLinecap='round'
+    strokeLinejoin='round'
+  >
+    <path d='M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7'></path>
+    <path d='m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z'></path>
+  </svg>
+);
+
 const Transformations = () => {
   const [rules, setRules] = useState([]);
   const [editingRule, setEditingRule] = useState(null);
@@ -102,9 +135,15 @@ const Transformations = () => {
     setIsModalOpen(true);
   };
 
-  const handleUpdateRule = async (updatedRule) => {
+  const handleUpdateRule = async (formValues) => {
     try {
-      await axios.put(`/api/transformation_rules/${updatedRule.id}`, {
+      // Combine the form values with the original rule data
+      const updatedRule = {
+        ...editingRule,
+        ...formValues,
+      };
+
+      await axios.put(`/api/transformation_rules/${editingRule.id}`, {
         transformation_rule: updatedRule,
       });
       fetchRules();
@@ -117,13 +156,24 @@ const Transformations = () => {
     }
   };
 
+  const handleCopyCode = (code) => {
+    navigator.clipboard
+      .writeText(code)
+      .then(() => {
+        Toastr.success("Code copied to clipboard!");
+      })
+      .catch(() => {
+        Toastr.error("Failed to copy code");
+      });
+  };
+
   if (loading) {
     return (
-      <div>
-        <Typography as='h1' className='mb-6'>
+      <div className='space-y-4'>
+        <Typography style='h1' className='mb-6'>
           Payload Transformations
         </Typography>
-        <Typography as='p' className='text-gray-600 dark:text-gray-300'>
+        <Typography style='body2' className='text-gray-600 dark:text-gray-300'>
           Loading transformation rules...
         </Typography>
       </div>
@@ -131,125 +181,160 @@ const Transformations = () => {
   }
 
   return (
-    <div>
-      <Typography as='h1' className='mb-6'>
-        Payload Transformations
-      </Typography>
-
-      <div className='bg-white dark:bg-gray-900 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 mb-8'>
-        <Typography as='h2' className='mb-4'>
-          Create New Rule
-        </Typography>
-        <CustomFormikForm
-          formikProps={{
-            initialValues: {
-              name: "",
-              body: 'payload.new_field = "transformed";',
-            },
-            onSubmit: handleCreateRule,
-            validationSchema,
-          }}
-          className='space-y-4'
-        >
-          {(props) => (
-            <>
-              <Input
-                {...props}
-                label='Rule Name'
-                name='name'
-                placeholder='e.g., "Format User Data"'
-              />
-              <div>
-                <Typography
-                  as='label'
-                  className='block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2'
-                >
-                  Transformation Logic (JavaScript)
-                </Typography>
-                <Typography
-                  as='p'
-                  className='text-xs text-gray-600 dark:text-gray-300 mb-2'
-                >
-                  Modify the <code>payload</code> object. It will be
-                  automatically stringified.
-                </Typography>
-                <div className='rounded-md overflow-hidden border border-gray-200 dark:border-gray-600'>
-                  <CodeMirror
-                    value={props.values.body}
-                    height='150px'
-                    extensions={[javascript({ jsx: true })]}
-                    onChange={(value) => props.setFieldValue("body", value)}
-                    theme={okaidia}
-                  />
-                </div>
-                {props.errors.body && props.touched.body && (
-                  <Typography as='p' className='text-red-500 text-sm mt-1'>
-                    {props.errors.body}
-                  </Typography>
-                )}
-              </div>
-              <Button
-                label='Create Rule'
-                variant='primary'
-                size='medium'
-                type='submit'
-                disabled={props.isSubmitting}
-              />
-            </>
-          )}
-        </CustomFormikForm>
+    <div className='space-y-8'>
+      <div className='mb-12'>
+        <Typography style='h1'>Payload Transformations</Typography>
       </div>
 
-      <div>
-        <Typography as='h2' className='mb-4'>
-          Existing Rules
-        </Typography>
+      <div className='bg-white dark:bg-gray-900 p-8 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700'>
+        <div className='mb-6'>
+          <Typography style='h2'>Create New Rule</Typography>
+        </div>
+        <div className='space-y-6'>
+          <CustomFormikForm
+            formikProps={{
+              initialValues: {
+                name: "",
+                body: 'payload.new_field = "transformed";',
+              },
+              onSubmit: handleCreateRule,
+              validationSchema,
+            }}
+          >
+            {(props) => (
+              <div className='space-y-6'>
+                <Input
+                  {...props}
+                  label='Rule Name'
+                  name='name'
+                  placeholder='e.g., "Format User Data"'
+                />
+                <div className='space-y-3'>
+                  <Typography
+                    style='body2'
+                    className='block text-sm font-medium text-gray-600 dark:text-gray-300'
+                  >
+                    Transformation Logic (JavaScript)
+                  </Typography>
+                  <Typography
+                    style='body3'
+                    className='text-xs text-gray-600 dark:text-gray-300'
+                  >
+                    Modify the <code>payload</code> object. It will be
+                    automatically stringified.
+                  </Typography>
+                  <div className='rounded-md overflow-hidden border border-gray-200 dark:border-gray-600 relative'>
+                    <button
+                      onClick={() => handleCopyCode(props.values.body)}
+                      className='absolute top-2 right-2 z-10 bg-white text-gray-700 p-2 rounded hover:bg-green-600 hover:text-white transition-colors border border-gray-200'
+                      title='Copy code'
+                    >
+                      <svg
+                        width='16'
+                        height='16'
+                        viewBox='0 0 24 24'
+                        fill='none'
+                        stroke='currentColor'
+                        strokeWidth='2'
+                        strokeLinecap='round'
+                        strokeLinejoin='round'
+                      >
+                        <rect
+                          x='9'
+                          y='9'
+                          width='13'
+                          height='13'
+                          rx='2'
+                          ry='2'
+                        ></rect>
+                        <path d='M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1'></path>
+                      </svg>
+                    </button>
+                    <CodeMirror
+                      value={props.values.body}
+                      height='150px'
+                      extensions={[javascript({ jsx: true })]}
+                      onChange={(value) => props.setFieldValue("body", value)}
+                      theme={okaidia}
+                    />
+                  </div>
+                  {props.errors.body && props.touched.body && (
+                    <Typography style='body3' className='text-red-500 text-sm'>
+                      {props.errors.body}
+                    </Typography>
+                  )}
+                </div>
+                <Button
+                  label='Create Rule'
+                  style='primary'
+                  size='medium'
+                  type='submit'
+                  disabled={props.isSubmitting}
+                />
+              </div>
+            )}
+          </CustomFormikForm>
+        </div>
+      </div>
+
+      <div className='space-y-6'>
+        <div className='mb-4'>
+          <Typography style='h2'>Existing Rules</Typography>
+        </div>
         <div className='space-y-4'>
           {rules.length === 0 ? (
-            <Typography as='p' className='text-gray-600 dark:text-gray-300'>
+            <Typography
+              style='body2'
+              className='text-gray-600 dark:text-gray-300'
+            >
               No transformation rules found.
             </Typography>
           ) : (
             rules.map((rule) => (
               <div
                 key={rule.id}
-                className='bg-white dark:bg-gray-900 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex justify-between items-center'
+                className='bg-white dark:bg-gray-900 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700'
               >
-                <div>
-                  <Typography
-                    as='p'
-                    className='font-bold text-gray-900 dark:text-gray-100'
-                  >
-                    {rule.name}
-                  </Typography>
-                  <Typography
-                    as='p'
-                    className='text-gray-600 dark:text-gray-300'
-                  >
-                    Type: {rule.rule_type}
-                  </Typography>
-                </div>
-                <div className='flex items-center space-x-4'>
-                  <Button
-                    label={rule.is_enabled ? "Enabled" : "Disabled"}
-                    variant={rule.is_enabled ? "primary" : "secondary"}
-                    size='small'
-                    onClick={() => handleToggleRule(rule)}
-                  />
-                  <Button
-                    label='Edit'
-                    variant='text'
-                    size='small'
-                    onClick={() => handleEditRule(rule)}
-                    className='text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300'
-                  />
-                  <Button
-                    label='Delete'
-                    variant='text'
-                    size='small'
-                    onClick={() => handleDeleteRule(rule.id)}
-                    className='text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300'
-                  />
+                <div className='flex flex-col items-start gap-6 md:flex-row md:items-center'>
+                  <div className='space-y-1 min-w-0 flex-grow'>
+                    <Typography
+                      style='h4'
+                      weight='semibold'
+                      className='truncate'
+                    >
+                      {rule.name}
+                    </Typography>
+                    <Typography
+                      style='body2'
+                      className='text-gray-600 dark:text-gray-300'
+                    >
+                      Type: {rule.rule_type}
+                    </Typography>
+                  </div>
+                  <div className='flex items-center space-x-2 flex-shrink-0'>
+                    <Button
+                      icon={EditIcon}
+                      style='text'
+                      size='small'
+                      tooltipProps={{
+                        content: "Edit rule",
+                        position: "top",
+                      }}
+                      onClick={() => handleEditRule(rule)}
+                    />
+                    <Button
+                      label={rule.is_enabled ? "Enabled" : "Disabled"}
+                      style={rule.is_enabled ? "primary" : "secondary"}
+                      size='small'
+                      onClick={() => handleToggleRule(rule)}
+                    />
+                    <Button
+                      label='Delete'
+                      style='danger'
+                      size='small'
+                      onClick={() => handleDeleteRule(rule.id)}
+                    />
+                  </div>
                 </div>
               </div>
             ))
