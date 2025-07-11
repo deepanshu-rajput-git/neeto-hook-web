@@ -1,3 +1,4 @@
+@import "./styles/neetoui.css";
 @import "tailwindcss";
 
 @layer base {

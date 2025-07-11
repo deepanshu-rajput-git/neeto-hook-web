@@ -1,72 +1,95 @@
 import React, { useState, useEffect } from "react";
+import { Modal, Typography, Button } from "@bigbinary/neetoui";
+import { Input } from "@bigbinary/neetoui/formik";
+import * as Yup from "yup";
 import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import { okaidia } from "@uiw/codemirror-theme-okaidia";
+import CustomFormikForm from "./CustomFormikForm";
 
-const EditRuleModal = ({ rule, onSave, onCancel }) => {
-  const [editedRule, setEditedRule] = useState(rule);
+const EditRuleModal = ({ rule, onSave, onCancel, isOpen }) => {
+  const validationSchema = Yup.object({
+    name: Yup.string().required("Rule name is required"),
+    body: Yup.string().required("Transformation logic is required"),
+  });
 
-  useEffect(() => {
-    setEditedRule(rule);
-  }, [rule]);
-
-  const handleSave = () => {
-    onSave(editedRule);
+  const handleSubmit = (values, { setSubmitting }) => {
+    onSave(values);
+    setSubmitting(false);
   };
 
   return (
-    <div className='fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center'>
-      <div className='relative mx-auto p-5 border w-full max-w-2xl shadow-sm rounded-md bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700'>
-        <h3 className='text-lg font-medium leading-6 text-gray-900 dark:text-gray-100'>
-          Edit Rule
-        </h3>
-        <div className='mt-2'>
-          <div className='mb-4'>
-            <label className='block text-sm font-medium text-gray-600 dark:text-gray-300'>
-              Rule Name
-            </label>
-            <input
-              type='text'
-              value={editedRule.name}
-              onChange={(e) =>
-                setEditedRule({ ...editedRule, name: e.target.value })
-              }
-              className='mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:text-gray-100'
+    <Modal isOpen={isOpen} onClose={onCancel} size='lg'>
+      <Modal.Header>
+        <Typography as='h3'>Edit Rule</Typography>
+      </Modal.Header>
+      <Modal.Body>
+        <CustomFormikForm
+          formikProps={{
+            initialValues: {
+              name: rule?.name || "",
+              body: rule?.body || "",
+            },
+            onSubmit: handleSubmit,
+            validationSchema,
+            enableReinitialize: true,
+          }}
+          className='space-y-4'
+        >
+          {(props) => (
+            <>
+              <Input {...props} label='Rule Name' name='name' />
+              <div>
+                <Typography
+                  as='label'
+                  className='block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2'
+                >
+                  Transformation Logic (JavaScript)
+                </Typography>
+                <div className='rounded-md overflow-hidden border border-gray-200 dark:border-gray-600'>
+                  <CodeMirror
+                    value={props.values.body}
+                    height='200px'
+                    extensions={[javascript({ jsx: true })]}
+                    onChange={(value) => props.setFieldValue("body", value)}
+                    theme={okaidia}
+                  />
+                </div>
+                {props.errors.body && props.touched.body && (
+                  <Typography as='p' className='text-red-500 text-sm mt-1'>
+                    {props.errors.body}
+                  </Typography>
+                )}
+              </div>
+            </>
+          )}
+        </CustomFormikForm>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button label='Cancel' variant='text' size='large' onClick={onCancel} />
+        <CustomFormikForm
+          formikProps={{
+            initialValues: {
+              name: rule?.name || "",
+              body: rule?.body || "",
+            },
+            onSubmit: handleSubmit,
+            validationSchema,
+            enableReinitialize: true,
+          }}
+        >
+          {(props) => (
+            <Button
+              label='Save'
+              variant='primary'
+              size='large'
+              type='submit'
+              disabled={props.isSubmitting}
             />
-          </div>
-          <div className='mb-4'>
-            <label className='block text-sm font-medium text-gray-600 dark:text-gray-300'>
-              Transformation Logic (JavaScript)
-            </label>
-            <div className='mt-1 rounded-md overflow-hidden border border-gray-200 dark:border-gray-600'>
-              <CodeMirror
-                value={editedRule.body}
-                height='200px'
-                extensions={[javascript({ jsx: true })]}
-                onChange={(value) =>
-                  setEditedRule({ ...editedRule, body: value })
-                }
-                theme={okaidia}
-              />
-            </div>
-          </div>
-        </div>
-        <div className='flex justify-end space-x-3 mt-4'>
-          <button
-            onClick={onCancel}
-            className='px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors duration-200'
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleSave}
-            className='px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors duration-200'
-          >
-            Save
-          </button>
-        </div>
-      </div>
-    </div>
+          )}
+        </CustomFormikForm>
+      </Modal.Footer>
+    </Modal>
   );
 };
 

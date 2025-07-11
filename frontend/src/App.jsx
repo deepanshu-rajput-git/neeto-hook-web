@@ -1,6 +1,21 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+
+// Simple debounce function
+const debounce = (func, wait) => {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+};
 
 import LandingPage from "./pages/LandingPage";
 import Dashboard from "./pages/Dashboard";
@@ -8,11 +23,9 @@ import HookDetails from "./pages/HookDetails";
 import Transformations from "./pages/Transformations";
 import HeaderBar from "./components/HeaderBar";
 import Sidebar from "./components/Sidebar";
-import { ToastrProvider, useToastr } from "./contexts/ToastrContext";
 import cable from "./services/cable";
 
 function AppContent() {
-  const { showSuccess, showError } = useToastr();
   const [isDarkMode, setIsDarkMode] = useState(() => {
     const saved = localStorage.getItem("darkMode");
     return saved ? JSON.parse(saved) : false; // Default to light theme
@@ -26,6 +39,9 @@ function AppContent() {
     successful_hooks: 0,
     failed_hooks: 0,
   });
+
+  const showSuccess = useCallback((message) => toast.success(message), []);
+  const showError = useCallback((message) => toast.error(message), []);
 
   useEffect(() => {
     if (isDarkMode) {
@@ -100,8 +116,17 @@ function AppContent() {
     } catch (error) {
       console.error("Error fetching stats:", error);
     }
-  }, [activeInbox]);
+  }, [activeInbox?.uuid]);
 
+  // Debounced version of fetchStats to prevent excessive calls
+  const debouncedFetchStats = useCallback(
+    debounce(() => {
+      fetchStats();
+    }, 1000),
+    [fetchStats]
+  );
+
+  // Initial data fetching when inbox changes
   useEffect(() => {
     if (!activeInbox) return;
 
@@ -118,6 +143,11 @@ function AppContent() {
 
     fetchHooks();
     fetchStats();
+  }, [activeInbox?.uuid, fetchStats]);
+
+  // WebSocket connection setup
+  useEffect(() => {
+    if (!activeInbox) return;
 
     const channel = cable.subscriptions.create(
       { channel: "WebhookChannel", uuid: activeInbox.uuid },
@@ -138,7 +168,7 @@ function AppContent() {
             const currentLatency = now - receivedAt;
 
             setHooks((prevHooks) => [data.webhook_request, ...prevHooks]);
-            fetchStats();
+            debouncedFetchStats();
             showSuccess(
               `New webhook received: #${data.webhook_request.id} (Latency: ${currentLatency}ms)`
             );
@@ -150,7 +180,7 @@ function AppContent() {
     return () => {
       channel.unsubscribe();
     };
-  }, [activeInbox, fetchStats, showSuccess, showError]);
+  }, [activeInbox?.uuid, debouncedFetchStats, showSuccess, showError]);
 
   const MainLayout = ({ children }) => (
     <div className='flex flex-col h-screen bg-white dark:bg-gray-900'>
@@ -163,44 +193,60 @@ function AppContent() {
   );
 
   return (
-    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-      <Routes>
-        <Route path='/' element={<LandingPage />} />
+    <Router>
+      <Switch>
+        <Route exact path='/' component={LandingPage} />
         <Route
-          path='/*'
-          element={
+          path='/dashboard'
+          render={() => (
             <MainLayout>
-              <Routes>
-                <Route
-                  path='dashboard'
-                  element={
-                    <Dashboard
-                      activeInbox={activeInbox}
-                      loading={loading}
-                      hooks={hooks}
-                      stats={stats}
-                    />
-                  }
-                />
-                <Route
-                  path='hooks/:id'
-                  element={<HookDetails activeInbox={activeInbox} />}
-                />
-                <Route path='transformations' element={<Transformations />} />
-              </Routes>
+              <Dashboard
+                activeInbox={activeInbox}
+                loading={loading}
+                hooks={hooks}
+                stats={stats}
+              />
             </MainLayout>
-          }
+          )}
         />
-      </Routes>
+        <Route
+          path='/hooks/:id'
+          render={(props) => (
+            <MainLayout>
+              <HookDetails {...props} activeInbox={activeInbox} />
+            </MainLayout>
+          )}
+        />
+        <Route
+          path='/transformations'
+          render={() => (
+            <MainLayout>
+              <Transformations />
+            </MainLayout>
+          )}
+        />
+      </Switch>
     </Router>
   );
 }
 
 function App() {
   return (
-    <ToastrProvider>
+    <>
       <AppContent />
-    </ToastrProvider>
+      <ToastContainer
+        position='bottom-right'
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme='light'
+      />
+    </>
   );
 }
 

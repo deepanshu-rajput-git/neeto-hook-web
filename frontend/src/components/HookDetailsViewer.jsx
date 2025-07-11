@@ -1,14 +1,13 @@
 import React, { useCallback, memo } from "react";
+import { Typography, Button } from "@bigbinary/neetoui";
+import { toast } from "react-toastify";
 import FormattedJsonViewer from "./FormattedJsonViewer";
-import { useToastr } from "../contexts/ToastrContext";
 
 const HookDetailsViewer = memo(({ hook }) => {
-  const { showSuccess } = useToastr();
-
   if (!hook) {
     return (
       <div className='text-center p-8 text-gray-600 dark:text-gray-300'>
-        Loading...
+        <Typography as='p'>Loading...</Typography>
       </div>
     );
   }
@@ -42,13 +41,10 @@ const HookDetailsViewer = memo(({ hook }) => {
     return headers;
   }, []);
 
-  const copyToClipboard = useCallback(
-    (text, type) => {
-      navigator.clipboard.writeText(text);
-      showSuccess(`${type} copied to clipboard!`);
-    },
-    [showSuccess]
-  );
+  const copyToClipboard = useCallback((text, type) => {
+    navigator.clipboard.writeText(text);
+    toast.success(`${type} copied to clipboard!`);
+  }, []);
 
   const parsedHeaders = parseHeaders(hook.headers);
   const parsedBody = safeParse(hook.body);
@@ -69,19 +65,24 @@ const HookDetailsViewer = memo(({ hook }) => {
   return (
     <div className='bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 max-w-5xl mx-auto overflow-hidden'>
       <div className='flex justify-between items-center bg-gray-800 dark:bg-gray-800 -mx-6 -mt-6 mb-6 p-4 rounded-t-lg'>
-        <h2 className='text-2xl font-bold text-white'>Webhook details</h2>
-        <button
+        <Typography as='h2' className='text-2xl font-bold text-white'>
+          Webhook details
+        </Typography>
+        <Button
+          label='Download'
+          variant='primary'
+          size='small'
           onClick={handleDownload}
-          className='bg-green-600 text-white px-3 py-1.5 rounded-md font-semibold hover:bg-green-700 transition-all duration-300 flex items-center group'
-        >
-          Download
-        </button>
+        />
       </div>
 
       <div className='mb-6 border-b border-gray-200 dark:border-gray-700 pb-4'>
-        <h3 className='text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2'>
+        <Typography
+          as='h3'
+          className='text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2'
+        >
           Request Info
-        </h3>
+        </Typography>
         <dl className='grid grid-cols-2 gap-x-4 gap-y-2 text-sm'>
           <dt className='text-gray-600 dark:text-gray-300'>ID:</dt>
           <dd className='text-gray-900 dark:text-gray-100 font-mono'>
@@ -110,17 +111,21 @@ const HookDetailsViewer = memo(({ hook }) => {
 
       <div className='mb-6'>
         <div className='flex justify-between items-center mb-2'>
-          <h3 className='text-lg font-semibold text-gray-900 dark:text-gray-100'>
+          <Typography
+            as='h3'
+            className='text-lg font-semibold text-gray-900 dark:text-gray-100'
+          >
             Headers
-          </h3>
-          <button
+          </Typography>
+          <Button
+            label='Copy'
+            variant='text'
+            size='small'
             onClick={() =>
               copyToClipboard(JSON.stringify(parsedHeaders, null, 2), "Headers")
             }
-            className='text-sm text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 transition-colors duration-200'
-          >
-            Copy
-          </button>
+            className='text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300'
+          />
         </div>
         <pre className='overflow-auto max-h-[200px] bg-gray-100 dark:bg-gray-800 rounded p-4 text-sm font-mono whitespace-pre-wrap break-words text-gray-900 dark:text-gray-100'>
           {JSON.stringify(parsedHeaders, null, 2)}
@@ -130,20 +135,24 @@ const HookDetailsViewer = memo(({ hook }) => {
       {parsedOriginalBody && (
         <div className='mb-6'>
           <div className='flex justify-between items-center mb-2'>
-            <h3 className='text-lg font-semibold text-gray-900 dark:text-gray-100'>
+            <Typography
+              as='h3'
+              className='text-lg font-semibold text-gray-900 dark:text-gray-100'
+            >
               Original Body
-            </h3>
-            <button
+            </Typography>
+            <Button
+              label='Copy'
+              variant='text'
+              size='small'
               onClick={() =>
                 copyToClipboard(
                   JSON.stringify(parsedOriginalBody, null, 2),
                   "Original Body"
                 )
               }
-              className='text-sm text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 transition-colors duration-200'
-            >
-              Copy
-            </button>
+              className='text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300'
+            />
           </div>
           <FormattedJsonViewer data={parsedOriginalBody} />
         </div>
@@ -151,17 +160,21 @@ const HookDetailsViewer = memo(({ hook }) => {
 
       <div className='mb-6'>
         <div className='flex justify-between items-center mb-2'>
-          <h3 className='text-lg font-semibold text-gray-900 dark:text-gray-100'>
+          <Typography
+            as='h3'
+            className='text-lg font-semibold text-gray-900 dark:text-gray-100'
+          >
             {parsedOriginalBody ? "Transformed Body" : "Body"}
-          </h3>
-          <button
+          </Typography>
+          <Button
+            label='Copy'
+            variant='text'
+            size='small'
             onClick={() =>
               copyToClipboard(JSON.stringify(parsedBody, null, 2), "Body")
             }
-            className='text-sm text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 transition-colors duration-200'
-          >
-            Copy
-          </button>
+            className='text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300'
+          />
         </div>
         <FormattedJsonViewer data={parsedBody} />
       </div>

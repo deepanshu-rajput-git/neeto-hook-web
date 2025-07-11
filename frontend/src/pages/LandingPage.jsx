@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { Typography, Button } from "@bigbinary/neetoui";
 import {
   ArrowRightIcon,
   CodeBracketIcon,
@@ -21,10 +22,10 @@ const Feature = ({ icon, title, children, delay }) => (
     <div className='flex items-center justify-center h-12 w-12 rounded-md bg-green-500 text-white mb-4'>
       {icon}
     </div>
-    <h3 className='text-xl font-bold text-gray-900 dark:text-gray-100 mb-2'>
+    <Typography as='h3' className='text-xl font-bold text-gray-900 dark:text-gray-100 mb-2'>
       {title}
-    </h3>
-    <p className='text-gray-600 dark:text-gray-300'>{children}</p>
+    </Typography>
+    <Typography as='p' className='text-gray-600 dark:text-gray-300'>{children}</Typography>
   </motion.div>
 );
 
@@ -36,10 +37,10 @@ const UseCase = ({ title, children, delay }) => (
     viewport={{ once: true }}
     className='bg-white dark:bg-gray-900 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700'
   >
-    <h3 className='text-xl font-bold text-gray-900 dark:text-gray-100 mb-2'>
+    <Typography as='h3' className='text-xl font-bold text-gray-900 dark:text-gray-100 mb-2'>
       {title}
-    </h3>
-    <p className='text-gray-600 dark:text-gray-300'>{children}</p>
+    </Typography>
+    <Typography as='p' className='text-gray-600 dark:text-gray-300'>{children}</Typography>
   </motion.div>
 );
 
@@ -51,10 +52,10 @@ const Testimonial = ({ quote, author, delay }) => (
     viewport={{ once: true }}
     className='bg-white dark:bg-gray-900 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700'
   >
-    <p className='text-gray-600 dark:text-gray-300 italic'>"{quote}"</p>
-    <p className='text-gray-900 dark:text-gray-100 font-bold mt-4'>
+    <Typography as='p' className='text-gray-600 dark:text-gray-300 italic'>"{quote}"</Typography>
+    <Typography as='p' className='text-gray-900 dark:text-gray-100 font-bold mt-4'>
       - {author}
-    </p>
+    </Typography>
   </motion.div>
 );
 
@@ -72,18 +73,20 @@ function LandingPage() {
           <nav className='flex items-center justify-between'>
             <Link to='/' className='flex items-center space-x-3'>
               <Logo />
-              <h1 className='text-xl font-bold text-gray-900 dark:text-gray-100'>
+              <Typography as='h1' className='text-xl font-bold text-gray-900 dark:text-gray-100'>
                 NeetoWebhooks
-              </h1>
+              </Typography>
             </Link>
             <div className='flex items-center space-x-6'>
-              <Link
+              <Button
+                label='Go to Dashboard'
+                variant='primary'
+                size='large'
                 to='/dashboard'
-                className='bg-green-600 text-white px-5 py-2.5 rounded-md font-semibold hover:bg-green-700 transition-all duration-300 flex items-center group'
-              >
-                Go to Dashboard
-                <ArrowRightIcon className='h-5 w-5 ml-2 transform group-hover:translate-x-1 transition-transform' />
-              </Link>
+                className='flex items-center group'
+                icon={ArrowRightIcon}
+                iconPosition='right'
+              />
             </div>
           </nav>
         </div>
@@ -91,35 +94,39 @@ function LandingPage() {
 
       {/* Hero Section */}
       <main className='container mx-auto px-6 pt-24 md:pt-32 text-center'>
-        <motion.h1
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
-          className='text-4xl md:text-6xl font-extrabold text-gray-900 dark:text-gray-100 leading-tight tracking-tight'
         >
-          Reliable Webhook Infrastructure
-        </motion.h1>
-        <motion.p
+          <Typography as='h1' className='text-4xl md:text-6xl font-extrabold text-gray-900 dark:text-gray-100 leading-tight tracking-tight'>
+            Reliable Webhook Infrastructure
+          </Typography>
+        </motion.div>
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.2 }}
-          className='mt-6 text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto'
+          className='mt-6'
         >
-          Inspect, transform, and deliver your webhooks with a
-          developer-friendly platform.
-        </motion.p>
+          <Typography as='p' className='text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto'>
+            Inspect, transform, and deliver your webhooks with a
+            developer-friendly platform.
+          </Typography>
+        </motion.div>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.4 }}
           className='mt-10'
         >
-          <Link
+          <Button
+            label='Get Your Webhook URL'
+            variant='primary'
+            size='large'
             to='/dashboard'
-            className='bg-green-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-green-700 transition-transform transform hover:scale-105 inline-flex items-center'
-          >
-            Get Your Webhook URL
-          </Link>
+            className='px-8 py-4 text-lg hover:scale-105 transition-transform'
+          />
         </motion.div>
       </main>
 
@@ -137,13 +144,13 @@ function LandingPage() {
       <section id='features' className='py-20 bg-white'>
         <div className='container mx-auto px-6'>
           <div className='text-center mb-16'>
-            <h2 className='text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100'>
+            <Typography as='h2' className='text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100'>
               Everything you need to handle webhooks
-            </h2>
-            <p className='text-gray-600 dark:text-gray-300 mt-4 max-w-2xl mx-auto text-lg'>
+            </Typography>
+            <Typography as='p' className='text-gray-600 dark:text-gray-300 mt-4 max-w-2xl mx-auto text-lg'>
               From local development to production-grade delivery, NeetoWebhooks
               has you covered.
-            </p>
+            </Typography>
           </div>
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8'>
             <Feature
@@ -182,13 +189,13 @@ function LandingPage() {
       <section id='use-cases' className='py-20 bg-gray-100'>
         <div className='container mx-auto px-6'>
           <div className='text-center mb-16'>
-            <h2 className='text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100'>
+            <Typography as='h2' className='text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100'>
               How will you use NeetoWebhooks?
-            </h2>
-            <p className='text-gray-600 dark:text-gray-300 mt-4 max-w-2xl mx-auto text-lg'>
+            </Typography>
+            <Typography as='p' className='text-gray-600 dark:text-gray-300 mt-4 max-w-2xl mx-auto text-lg'>
               NeetoWebhooks is a versatile tool that can be used in a variety of
               scenarios.
-            </p>
+            </Typography>
           </div>
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
             <UseCase delay={0} title='Webhook Development'>
@@ -211,9 +218,9 @@ function LandingPage() {
       <section id='testimonials' className='py-20 bg-white'>
         <div className='container mx-auto px-6'>
           <div className='text-center mb-16'>
-            <h2 className='text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100'>
+            <Typography as='h2' className='text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100'>
               What our users are saying
-            </h2>
+            </Typography>
           </div>
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
             <Testimonial
@@ -238,7 +245,7 @@ function LandingPage() {
       {/* Footer */}
       <footer className='bg-gray-100 border-t border-gray-200'>
         <div className='container mx-auto px-6 py-8 text-center text-gray-500'>
-          <p>&copy; 2025 NeetoWebhooks. A BigBinary Product.</p>
+          <Typography as='p'>&copy; 2025 NeetoWebhooks. A BigBinary Product.</Typography>
         </div>
       </footer>
     </div>

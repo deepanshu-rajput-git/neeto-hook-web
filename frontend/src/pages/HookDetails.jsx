@@ -2,12 +2,10 @@ import React, { useState, useEffect, memo } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import HookDetailsViewer from "../components/HookDetailsViewer";
-import { useToastr } from "../contexts/ToastrContext";
 
 const HookDetails = memo(({ activeInbox }) => {
   const { id } = useParams();
   const [hook, setHook] = useState(null);
-  const { showSuccess } = useToastr();
 
   useEffect(() => {
     if (!activeInbox) return;

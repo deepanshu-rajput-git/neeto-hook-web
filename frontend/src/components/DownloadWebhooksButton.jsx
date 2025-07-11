@@ -1,10 +1,10 @@
 import React, { useState } from "react";
+import { Button } from "@bigbinary/neetoui";
 import { fetchWebhooksForInbox } from "../utils/api";
-import { useToastr } from "../contexts/ToastrContext";
+import { toast } from "react-toastify";
 
 const DownloadWebhooksButton = ({ inboxId }) => {
   const [isDownloading, setIsDownloading] = useState(false);
-  const { showSuccess, showError } = useToastr();
 
   const handleDownload = async () => {
     setIsDownloading(true);
@@ -20,22 +20,23 @@ const DownloadWebhooksButton = ({ inboxId }) => {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      showSuccess("Webhooks downloaded successfully!");
+      toast.success("Webhooks downloaded successfully!");
     } catch (error) {
-      showError("Failed to download webhooks.");
+      toast.error("Failed to download webhooks.");
     } finally {
       setIsDownloading(false);
     }
   };
 
   return (
-    <button
+    <Button
+      label={isDownloading ? "Downloading..." : "Download webhooks"}
+      variant='primary'
+      size='small'
       onClick={handleDownload}
       disabled={isDownloading}
-      className='bg-green-600 text-white px-3 py-1.5 rounded-md text-sm font-medium hover:bg-green-700 disabled:bg-green-300 disabled:cursor-not-allowed transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 shadow-sm'
-    >
-      {isDownloading ? "Downloading..." : "Download webhooks"}
-    </button>
+      loading={isDownloading}
+    />
   );
 };
 

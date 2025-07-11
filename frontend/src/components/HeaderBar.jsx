@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Typography } from "@bigbinary/neetoui";
 import Logo from "./Logo";
 import DarkModeToggle from "./DarkModeToggle";
 
@@ -11,9 +12,9 @@ const HeaderBar = ({ isDarkMode, setIsDarkMode }) => {
         className='flex items-center space-x-3 hover:opacity-80 transition-opacity duration-200'
       >
         <Logo />
-        <h1 className='text-xl font-bold text-gray-900 dark:text-gray-100'>
+        <Typography style='h2' className='text-gray-900 dark:text-gray-100'>
           NeetoWebhooks
-        </h1>
+        </Typography>
       </Link>
       <DarkModeToggle
         isDark={isDarkMode}

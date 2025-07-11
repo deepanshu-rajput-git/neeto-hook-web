@@ -1,31 +1,32 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { Button, Typography } from "@bigbinary/neetoui";
+import { Input, Textarea } from "@bigbinary/neetoui/formik";
+import * as Yup from "yup";
+import { toast } from "react-toastify";
 import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import { okaidia } from "@uiw/codemirror-theme-okaidia";
 import axios from "axios";
 import EditRuleModal from "../components/EditRuleModal";
-import { useToastr } from "../contexts/ToastrContext";
+import CustomFormikForm from "../components/CustomFormikForm";
 
 const Transformations = () => {
-  const { showSuccess, showError } = useToastr();
   const [rules, setRules] = useState([]);
-  const [newRule, setNewRule] = useState({
-    name: "",
-    rule_type: "JS",
-    body: `payload.email = payload.user_name.match(/([^)]+)/)[1];
-payload.username = payload.user_name.split(" ")[0];`,
-    is_enabled: true,
-  });
   const [editingRule, setEditingRule] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  const validationSchema = Yup.object({
+    name: Yup.string().required("Rule name is required"),
+    body: Yup.string().required("Transformation logic is required"),
+  });
 
   const fetchRules = useCallback(async () => {
     try {
       // Get the active inbox from localStorage
       const inboxUUID = localStorage.getItem("webhook_inbox_uuid");
       if (!inboxUUID) {
-        showError("No webhook inbox found. Please refresh the page.");
+        toast.error("No webhook inbox found. Please refresh the page.");
         setLoading(false);
         return;
       }
@@ -38,36 +39,35 @@ payload.username = payload.user_name.split(" ")[0];`,
       setLoading(false);
     } catch (error) {
       console.error("Error fetching transformation rules:", error);
-      showError("Failed to load transformation rules");
+      toast.error("Failed to load transformation rules");
       setRules([]); // fallback to empty array on error
       setLoading(false);
     }
-  }, [showError]);
+  }, []);
 
   useEffect(() => {
     fetchRules();
   }, [fetchRules]);
 
-  const handleCreateRule = async (e) => {
-    e.preventDefault();
+  const handleCreateRule = async (values, { resetForm }) => {
     try {
       const inboxUUID = localStorage.getItem("webhook_inbox_uuid");
       await axios.post(
         `/api/webhook_inboxes/${inboxUUID}/transformation_rules`,
         {
-          transformation_rule: newRule,
+          transformation_rule: {
+            ...values,
+            rule_type: "JS",
+            is_enabled: true,
+          },
         }
       );
       fetchRules();
-      setNewRule({
-        name: "",
-        rule_type: "JS",
-        body: 'payload.new_field = "transformed";',
-      });
-      showSuccess("Transformation rule created successfully!");
+      resetForm();
+      toast.success("Transformation rule created successfully!");
     } catch (error) {
       console.error("Error creating transformation rule:", error);
-      showError("Failed to create transformation rule");
+      toast.error("Failed to create transformation rule");
     }
   };
 
@@ -75,10 +75,10 @@ payload.username = payload.user_name.split(" ")[0];`,
     try {
       await axios.delete(`/api/transformation_rules/${id}`);
       fetchRules();
-      showSuccess("Transformation rule deleted successfully!");
+      toast.success("Transformation rule deleted successfully!");
     } catch (error) {
       console.error("Error deleting transformation rule:", error);
-      showError("Failed to delete transformation rule");
+      toast.error("Failed to delete transformation rule");
     }
   };
 
@@ -89,12 +89,12 @@ payload.username = payload.user_name.split(" ")[0];`,
         transformation_rule: updatedRule,
       });
       fetchRules();
-      showSuccess(
+      toast.success(
         `Rule ${updatedRule.is_enabled ? "enabled" : "disabled"} successfully!`
       );
     } catch (error) {
       console.error("Error toggling transformation rule:", error);
-      showError("Failed to update rule status");
+      toast.error("Failed to update rule status");
     }
   };
 
@@ -111,86 +111,105 @@ payload.username = payload.user_name.split(" ")[0];`,
       fetchRules();
       setIsModalOpen(false);
       setEditingRule(null);
-      showSuccess("Transformation rule updated successfully!");
+      toast.success("Transformation rule updated successfully!");
     } catch (error) {
       console.error("Error updating transformation rule:", error);
-      showError("Failed to update transformation rule");
+      toast.error("Failed to update transformation rule");
     }
   };
 
   if (loading) {
     return (
       <div>
-        <h1 className='text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6'>
+        <Typography as='h1' className='mb-6'>
           Payload Transformations
-        </h1>
-        <p className='text-gray-600 dark:text-gray-300'>
+        </Typography>
+        <Typography as='p' className='text-gray-600 dark:text-gray-300'>
           Loading transformation rules...
-        </p>
+        </Typography>
       </div>
     );
   }
 
   return (
     <div>
-      <h1 className='text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6'>
+      <Typography as='h1' className='mb-6'>
         Payload Transformations
-      </h1>
+      </Typography>
 
       <div className='bg-white dark:bg-gray-900 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 mb-8'>
-        <h2 className='text-xl font-bold text-gray-900 dark:text-gray-100 mb-4'>
+        <Typography as='h2' className='mb-4'>
           Create New Rule
-        </h2>
-        <form onSubmit={handleCreateRule}>
-          <div className='mb-4'>
-            <label className='block text-sm font-medium text-gray-600 dark:text-gray-300'>
-              Rule Name
-            </label>
-            <input
-              type='text'
-              value={newRule.name}
-              onChange={(e) => setNewRule({ ...newRule, name: e.target.value })}
-              className='mt-1 block w-full bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-2 focus:ring-green-500 focus:border-transparent sm:text-sm p-2 text-gray-900 dark:text-gray-100'
-              placeholder='e.g., "Format User Data"'
-              required
-            />
-          </div>
-          <div className='mb-4'>
-            <label className='block text-sm font-medium text-gray-600 dark:text-gray-300'>
-              Transformation Logic (JavaScript)
-            </label>
-            <p className='text-xs text-gray-600 dark:text-gray-300 mb-2'>
-              Modify the <code>payload</code> object. It will be automatically
-              stringified.
-            </p>
-            <div className='rounded-md overflow-hidden border border-gray-200 dark:border-gray-600'>
-              <CodeMirror
-                value={newRule.body}
-                height='150px'
-                extensions={[javascript({ jsx: true })]}
-                onChange={(value) => setNewRule({ ...newRule, body: value })}
-                theme={okaidia}
+        </Typography>
+        <CustomFormikForm
+          formikProps={{
+            initialValues: {
+              name: "",
+              body: 'payload.new_field = "transformed";',
+            },
+            onSubmit: handleCreateRule,
+            validationSchema,
+          }}
+          className='space-y-4'
+        >
+          {(props) => (
+            <>
+              <Input
+                {...props}
+                label='Rule Name'
+                name='name'
+                placeholder='e.g., "Format User Data"'
               />
-            </div>
-          </div>
-          <button
-            type='submit'
-            className='inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200'
-          >
-            Create Rule
-          </button>
-        </form>
+              <div>
+                <Typography
+                  as='label'
+                  className='block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2'
+                >
+                  Transformation Logic (JavaScript)
+                </Typography>
+                <Typography
+                  as='p'
+                  className='text-xs text-gray-600 dark:text-gray-300 mb-2'
+                >
+                  Modify the <code>payload</code> object. It will be
+                  automatically stringified.
+                </Typography>
+                <div className='rounded-md overflow-hidden border border-gray-200 dark:border-gray-600'>
+                  <CodeMirror
+                    value={props.values.body}
+                    height='150px'
+                    extensions={[javascript({ jsx: true })]}
+                    onChange={(value) => props.setFieldValue("body", value)}
+                    theme={okaidia}
+                  />
+                </div>
+                {props.errors.body && props.touched.body && (
+                  <Typography as='p' className='text-red-500 text-sm mt-1'>
+                    {props.errors.body}
+                  </Typography>
+                )}
+              </div>
+              <Button
+                label='Create Rule'
+                variant='primary'
+                size='medium'
+                type='submit'
+                disabled={props.isSubmitting}
+              />
+            </>
+          )}
+        </CustomFormikForm>
       </div>
 
       <div>
-        <h2 className='text-xl font-bold text-gray-900 dark:text-gray-100 mb-4'>
+        <Typography as='h2' className='mb-4'>
           Existing Rules
-        </h2>
+        </Typography>
         <div className='space-y-4'>
           {rules.length === 0 ? (
-            <p className='text-gray-600 dark:text-gray-300'>
+            <Typography as='p' className='text-gray-600 dark:text-gray-300'>
               No transformation rules found.
-            </p>
+            </Typography>
           ) : (
             rules.map((rule) => (
               <div
@@ -198,36 +217,40 @@ payload.username = payload.user_name.split(" ")[0];`,
                 className='bg-white dark:bg-gray-900 p-4 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex justify-between items-center'
               >
                 <div>
-                  <p className='font-bold text-gray-900 dark:text-gray-100'>
+                  <Typography
+                    as='p'
+                    className='font-bold text-gray-900 dark:text-gray-100'
+                  >
                     {rule.name}
-                  </p>
-                  <p className='text-sm text-gray-600 dark:text-gray-300'>
+                  </Typography>
+                  <Typography
+                    as='p'
+                    className='text-gray-600 dark:text-gray-300'
+                  >
                     Type: {rule.rule_type}
-                  </p>
+                  </Typography>
                 </div>
                 <div className='flex items-center space-x-4'>
-                  <button
+                  <Button
+                    label={rule.is_enabled ? "Enabled" : "Disabled"}
+                    variant={rule.is_enabled ? "primary" : "secondary"}
+                    size='small'
                     onClick={() => handleToggleRule(rule)}
-                    className={`px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${
-                      rule.is_enabled
-                        ? "bg-green-600 text-white hover:bg-green-700"
-                        : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
-                    }`}
-                  >
-                    {rule.is_enabled ? "Enabled" : "Disabled"}
-                  </button>
-                  <button
+                  />
+                  <Button
+                    label='Edit'
+                    variant='text'
+                    size='small'
                     onClick={() => handleEditRule(rule)}
-                    className='text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 hover:underline transition-colors duration-200'
-                  >
-                    Edit
-                  </button>
-                  <button
+                    className='text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300'
+                  />
+                  <Button
+                    label='Delete'
+                    variant='text'
+                    size='small'
                     onClick={() => handleDeleteRule(rule.id)}
-                    className='text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 hover:underline transition-colors duration-200'
-                  >
-                    Delete
-                  </button>
+                    className='text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300'
+                  />
                 </div>
               </div>
             ))
@@ -239,6 +262,7 @@ payload.username = payload.user_name.split(" ")[0];`,
           rule={editingRule}
           onSave={handleUpdateRule}
           onCancel={() => setIsModalOpen(false)}
+          isOpen={isModalOpen}
         />
       )}
     </div>
